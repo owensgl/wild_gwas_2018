@@ -22,9 +22,9 @@ pop_loc %>% rename(population = pop) %>% inner_join(.,labels) -> labels
 usa <- map_data('state')
 states <- map_data("state")
 target_state <- map_data('state')
-lat_range <- c(30, 43)
-long_range <- c(-115,-95)
-pie_size <- 0.4
+lat_range <- c(30, 40)
+long_range <- c(-115,-100)
+pie_size = 0.4
 
 window_size <- 500
 k_kept <- 40
