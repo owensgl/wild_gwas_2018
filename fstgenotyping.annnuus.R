@@ -43,13 +43,22 @@ for (mds in unique(fst_genotyped$mds_coord)){
       filter(total > 40) %>%
       filter(mds_coord == mds) %>%
       inner_join(.,labels) %>% 
-      filter(species == "Ann") %>%
+      filter(species == "Ann") %>% 
+      mutate(reference_count = perc_1[which(name == "SAM261")]) %>% 
       ggplot(.,aes(perc_1)) +
       geom_histogram() +
       theme_few() +
       ylab("Count") +
       xlab("Proportion `1` allele") +
-      facet_wrap(~is_wild,scales="free_y") ->p2
+      facet_wrap(~is_wild,scales="free_y") +
+      geom_vline(data = fst_genotyped %>%
+                   filter(name == "SAM261") %>%
+                   mutate(total =  (`00` + `01` + `11`)*2,
+                          perc_1 = ((`11`*2) + `01`)/total,
+                          het = (`01`*2)/total) %>%
+                   filter(total > 40) %>%
+                   filter(mds_coord == mds) %>% head(),
+                   aes(xintercept = perc_1),color="red") ->p2
   print(  
     grid.arrange(p1, p2, nrow = 2,top=mds)
   )
