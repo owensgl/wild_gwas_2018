@@ -25,7 +25,7 @@ while(<MDS>){
   $outlier_end{$mds}{$chr}{$n} = $end;
 }
 close MDS;
-print "chr\tpos\tN1\tN2\tFstNum\tFstDenom\tFst\tINV_0_allele\tINV_2_allele\tmds_coord";
+print "chr\tpos\tN1\tN2\tFstNum\tFstDenom\tFst\tfreq_dif\tINV_0_allele\tINV_2_allele\tmds_coord";
 foreach my $mds (sort keys %outlier_start){
   my $filename = "$fst_file_prefix.$mds.fst.txt.gz";
   open(IN, "zcat -c $filename |");
