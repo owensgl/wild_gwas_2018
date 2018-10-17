@@ -85,8 +85,12 @@ while(<IN>){
       my @fields = split(/:/,$a[$i]);
       my $genotype = $fields[0];
 <<<<<<< HEAD:genotype_inv_from_freq_printsites.pl
+<<<<<<< HEAD:genotype_inv_from_freq_printsites.pl
       my $dp = $fields[$dp_n];
       if ($dp == 0){next;}
+=======
+      my $dp = $fields[2];
+>>>>>>> 144e4c7faf11e51653b5de32255e2c2f212aa55d:genotype_inv_from_freq_printsites.pl
 =======
       my $dp = $fields[2];
 >>>>>>> 144e4c7faf11e51653b5de32255e2c2f212aa55d:genotype_inv_from_freq_printsites.pl
