@@ -1,3 +1,6 @@
 .RData
 .Rhistory
 .Rproj.user
+large_pdfs/
+*sitecalls.pdf
+*.sitecalls.pdf

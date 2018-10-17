@@ -17,9 +17,9 @@ while(<MDS>){
   my $chr = $a[0];
   my $pos = $a[1];
   my $fst = $a[6];
-  my $mds = $a[9];
-  my $inv_0_allele = $a[7];
-  my $inv_2_allele = $a[8];
+  my $mds = $a[10];
+  my $inv_0_allele = $a[8];
+  my $inv_2_allele = $a[9];
   if ($fst < $min_fst){next;}
   $allele_1{$chr}{$pos}{$mds} = $inv_0_allele;
   $allele_2{$chr}{$pos}{$mds} = $inv_2_allele;

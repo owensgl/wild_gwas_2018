@@ -87,6 +87,7 @@ dev.off()
 
 
 saveRDS(win.regions, file = paste(data_name,".",window_size,".windows.rds",sep=""))
+#win.regions <- readRDS(paste(data_name,".",window_size,".windows.rds",sep=""))
 
 
 #Trying to dplyr::select outliers for each MDS PC
@@ -266,7 +267,7 @@ for (i in 1:nrow(sig_mds_clusters)){
 
   out.rotation$cluster <- kmeans_cluster$cluster - 1 
   out.rotation$cluster <- as.character(out.rotation$cluster)
-  out.rotation$mds_coord <- paste(coord, direction,sep="_")
+  out.rotation$mds_coord <- paste(coord, direction,sep="-")
   
   genotype.out <- out.rotation %>% dplyr::select(mds_coord,name,PC1,cluster) %>%
     rename(genotype = cluster) 
@@ -299,11 +300,25 @@ for (mds in unique(outlier_windows$mds_coord)){
   mds_distances <- rbind(mds_distances, tmp_tibble)
 }
 
+#Counting of outlier windows
+mds_counts <- tibble(mds_coord = character(),n_outliers = numeric())
+
+for (mds in unique(outlier_windows$mds_coord)){
+  count_outliers <- outlier_windows %>%
+    filter(mds_coord == mds) %>% nrow()
+  tmp_tibble <- tibble(mds_coord = as.character(mds),n_outliers = as.numeric(count_outliers))
+  mds_counts <- rbind(mds_counts, tmp_tibble)
+}
+
+
+
 #Correlation between MDS for collapsing them
 correlated_mds <- tibble(mds1 = character(),mds2 = character(),correlation = numeric())
-for (mds1 in unique(outlier_windows$mds_coord)){
-  for (mds2 in unique(outlier_windows$mds_coord)){
-    if (mds1 == mds2){next}
+total_mds_coords <- unique(outlier_windows$mds_coord)
+for (i in 1:(length(total_mds_coords)-1)){
+  for (j in (i+1):length(total_mds_coords)){
+    mds1 <- total_mds_coords[i]
+    mds2 <- total_mds_coords[j]
     chr1 <- outlier_windows %>% filter(mds_coord == mds1) %>% dplyr::select(chrom) %>% unique() %>% pull()
     chr2 <- outlier_windows %>% filter(mds_coord == mds2) %>% dplyr::select(chrom) %>% unique() %>% pull()
     if (chr1 != chr2){next;}
@@ -315,20 +330,20 @@ for (mds1 in unique(outlier_windows$mds_coord)){
     test_result <- cor.test(x,y,na.rm=T)
     tmp_tibble <- tibble(mds1 = as.character(mds1),mds2 = as.character(mds2),correlation = as.numeric(abs(test_result$estimate)))
     correlated_mds <- rbind(correlated_mds, tmp_tibble)
+    print(paste(mds2, test_result$estimate))
   }
 }
 
-#Check pairs with high correlation and pull out the mds that is less clustered
-total_mds_coords <- unique(outlier_windows$mds_coord)
+#Check pairs with high correlation and pull out the mds that has fewer outlier windows.
 min_cor <- 0.9
 
 for (i in 1:nrow(correlated_mds)){
   if (correlated_mds[i,3] >= min_cor){
-    distance1 <- mds_distances %>% filter(mds_coord == as.character(correlated_mds[i,1])) %>% pull(mean_dist)
-    distance2 <- mds_distances %>% filter(mds_coord == as.character(correlated_mds[i,2])) %>% pull(mean_dist)
-    if (distance1 > distance2){
+    count1 <- mds_counts %>% filter(mds_coord == as.character(correlated_mds[i,1])) %>% pull(n_outliers)
+    count2 <- mds_counts %>% filter(mds_coord == as.character(correlated_mds[i,2])) %>% pull(n_outliers)
+    if (count1 < count2){
       total_mds_coords[which(total_mds_coords != as.character(correlated_mds[i,1]))] -> total_mds_coords
-    }else if(distance1 <= distance2){
+    }else{
       total_mds_coords[which(total_mds_coords != as.character(correlated_mds[i,2]))] -> total_mds_coords
     }
   }
@@ -543,7 +558,7 @@ for (i in 1:nrow(sig_mds_clusters)){
   #Save stats about each possible inversion
   tmp_stats <- tibble(mds_coord=as.character(coord_direction),betweenSS=as.numeric(PC1_cluster),
                       het_pvalue=as.numeric(high_pvalue),window_cluster=as.numeric(window.cluster),
-                            location=as.character(paste(chromosome,":",middle,"MB", sep="")))
+                      location=as.character(paste(chromosome,":",middle,"MB", sep="")))
   inversion_stats <- rbind(inversion_stats, tmp_stats)
   print(
     grid.arrange(

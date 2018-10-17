@@ -6,27 +6,31 @@ library(forcats)
 library(ggrastr)
 library(gridExtra)
 
-prefix <- "Annuus.tranche90.snp.fullsam.90.bi.500"
-input_directory <- "/media/owens/Copper/wild_gwas_2018/annuus_sam"
 
-fst_calls <- read_tsv(paste(input_directory, "/",prefix, ".mdsoutlierfst.sitecalls.txt",sep=""))
-
+directory <- "Annuus.tranche90.snp.env.90.bi.500.mdsoutlierfst.calls"
+base_directory <- "/media/owens/Copper/wild_gwas_2018/annuus"
 labels <- read_tsv("/home/owens/working/sample_info_apr_2018.tsv",col_names = T)
+prefix <- "Annuus.tranche90.snp.env.90.bi.500.all"
+
+
+all_files <- list.files(paste(base_directory,"/",directory,sep=""))
+data <- data_frame(filename = all_files) %>% # create a data frame
+  mutate(file_contents = map(filename,          # read files into
+                             ~ read_tsv(file.path(paste(base_directory,"/",directory,sep=""), .))))
+
+fst_calls <- unnest(data) %>% select(-filename) %>% rename(name=sample) %>% inner_join(., labels)
 
 
 min_depth = 5 #Minimum number of reads required
 
-fst_calls %>%
-  rename(name = sample, site_genotype = genotype) %>%
-  inner_join(., labels) %>% 
-  full_join(., samples_genotyped) -> fst_calls
+
 
 fst_calls %>%
   filter(depth >= min_depth) %>%
-  group_by(name, genotype, mds_coord,  site_genotype) %>%
+  group_by(name, mds_coord, species,population, is_wild, genotype) %>%
   count() %>%
-  filter(!is.na(site_genotype)) %>%
-  spread(site_genotype, n,fill=0) %>%
+  filter(!is.na(genotype)) %>%
+  spread(genotype, n,fill=0) %>%
   mutate(total =  (`00` + `01` + `11`)*2,
          perc_1 = ((`11`*2) + `01`)/total,
          het = (`01`*2)/total) %>%
@@ -41,8 +45,38 @@ pdf(paste(prefix, ".mdsoutlierfst.calls.pdf",sep=""),width=8,height=6)
 for (mds_chosen in sort(unique(fst_samples$mds_coord))){
   if(fst_samples %>%filter(total > 40, mds_coord == mds_chosen) %>% nrow() == 0){next}
   fst_samples %>%
-    inner_join(.,labels) %>%
     filter(total > 40, mds_coord == mds_chosen) %>%
+    ggplot(.,aes(x=perc_1,y=het)) +
+    geom_segment(aes(x=0,xend=0.5,y=0,yend=1),color="grey") +
+    geom_segment(aes(x=0.5,xend=1,y=1,yend=0),color="grey") +
+    geom_segment(aes(x=0,xend=1,y=0,yend=0),color="grey") +
+    geom_point() +
+    theme_few() +
+    ylab("Heterozygosity") +
+    xlab("Proportion `1` allele") +
+    facet_wrap(~species)-> p1
+  
+  fst_samples %>%
+    filter(total > 40, mds_coord == mds_chosen) %>%
+    ggplot(.,aes(perc_1)) +
+    geom_histogram() +
+    theme_few() +
+    ylab("Count") +
+    xlab("Proportion `1` allele") +
+    facet_wrap(~species,scales="free_y")  ->p2
+  print(  
+    grid.arrange(p1, p2, nrow = 2,top=mds_chosen)
+  )
+}
+dev.off()
+
+
+pdf(paste(prefix, ".mdsoutlierfst.calls.justann.pdf",sep=""),width=8,height=6)
+for (mds_chosen in sort(unique(fst_samples$mds_coord))){
+  if(fst_samples %>%filter(total > 20, mds_coord == mds_chosen) %>% nrow() == 0){next}
+  fst_samples %>%
+    filter(species == "Ann") %>%
+    filter(total > 20, mds_coord == mds_chosen) %>%
     ggplot(.,aes(x=perc_1,y=het)) +
     geom_segment(aes(x=0,xend=0.5,y=0,yend=1),color="grey") +
     geom_segment(aes(x=0.5,xend=1,y=1,yend=0),color="grey") +
@@ -54,26 +88,25 @@ for (mds_chosen in sort(unique(fst_samples$mds_coord))){
     facet_wrap(~is_wild)-> p1
   
   fst_samples %>%
-    inner_join(.,labels) %>%
-    filter(total > 40, mds_coord == mds_chosen) %>%
+    filter(species == "Ann") %>%
+    filter(total > 20, mds_coord == mds_chosen) %>%
     ggplot(.,aes(perc_1)) +
     geom_histogram() +
     theme_few() +
     ylab("Count") +
     xlab("Proportion `1` allele") +
-    facet_wrap(~is_wild,scales="free_y") +
-    geom_vline(data = fst_samples %>%
-                 filter(name == "SAM261") %>%
-                 filter(total > 40) %>%
-                 filter(mds_coord == mds_chosen),
-               aes(xintercept = perc_1),color="red") ->p2
+    geom_vline(data=fst_samples %>%
+                 filter(name == "SAM053", mds_coord == mds_chosen),
+               aes(xintercept=perc_1),color="blue",alpha=0.8) +
+    geom_vline(data=fst_samples %>%
+                 filter(name == "SAM261", mds_coord == mds_chosen),
+               aes(xintercept=perc_1),color="red",alpha=0.8) +
+    facet_wrap(~is_wild,scales="free_y") ->p2
   print(  
     grid.arrange(p1, p2, nrow = 2,top=mds_chosen)
   )
 }
 dev.off()
-
-
 
 
 pdf(paste(prefix, ".mdsoutlierfst.sitecalls.pdf",sep=""),width=5,height=10)
@@ -85,8 +118,13 @@ for (mds_chosen in sort(unique(fst_calls$mds_coord))){
     fst_calls %>%
       filter(depth >= min_depth) %>%
       filter(mds_coord == mds_chosen) %>%
-      inner_join(., fst_samples) %>%
-      ggplot(.,aes(y=fct_reorder(name, perc_1),x=as.factor(pos),fill=as.factor(site_genotype))) + 
+      group_by(name) %>%
+      mutate(count = n()) %>%
+      ungroup() %>%
+      mutate(max_count = max(count)) %>% 
+      filter(count > max_count/10) %>%
+      inner_join(., fst_samples) %>% 
+      ggplot(.,aes(y=fct_reorder(name, perc_1),x=as.factor(pos),fill=as.factor(genotype))) + 
       geom_tile_rast() + 
       theme_few() + 
       scale_fill_brewer(palette = "Set1",name="Site Genotype") +
@@ -96,9 +134,22 @@ for (mds_chosen in sort(unique(fst_calls$mds_coord))){
             axis.ticks.y=element_blank()) +
       ylab("Sample") + xlab("Position") +
       ggtitle(paste(mds_chosen, "min depth =", min_depth)) +
-      facet_wrap(~is_wild,nrow=3,scales="free_y")
+      facet_wrap(~species,nrow=3,scales="free_y")
   )
 }
 dev.off()
 
-
+pdf(paste(prefix, ".mdsoutlierfst.sitecalls.sam.pdf",sep=""),width=5,height=30)
+fst_samples %>%
+  filter(is_wild == "cultivar") %>%
+  filter(total > 20) %>% 
+  mutate(call = case_when(perc_1 < 0.15 ~ "0",
+                          perc_1 > 0.85 ~ "2",
+                          TRUE ~ "1"))%>%
+  ggplot(.) +
+  geom_tile(aes(y=name,x=mds_coord,fill=call)) +
+  scale_fill_brewer(palette = "Set1",name="Inversion call") +
+  theme_few() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(size=5))
+dev.off()

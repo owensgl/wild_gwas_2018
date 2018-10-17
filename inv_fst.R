@@ -5,7 +5,7 @@ library(ggthemes)
 ####PETPET
 
 directory <- "/media/owens/Copper/wild_gwas_2018/petpet/"
-fst_files <- list.files(directory, pattern="fst.txt.gz")
+fst_files <- list.files(directory, pattern="fst.txt.gz") 
 
 
 fst.data <- data_frame(filename = fst_files) %>% # create a data frame
