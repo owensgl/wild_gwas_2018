@@ -314,9 +314,11 @@ for (mds in unique(outlier_windows$mds_coord)){
 
 #Correlation between MDS for collapsing them
 correlated_mds <- tibble(mds1 = character(),mds2 = character(),correlation = numeric())
-for (mds1 in unique(outlier_windows$mds_coord)){
-  for (mds2 in unique(outlier_windows$mds_coord)){
-    if (mds1 == mds2){next}
+total_mds_coords <- unique(outlier_windows$mds_coord)
+for (i in 1:(length(total_mds_coords)-1)){
+  for (j in (i+1):length(total_mds_coords)){
+    mds1 <- total_mds_coords[i]
+    mds2 <- total_mds_coords[j]
     chr1 <- outlier_windows %>% filter(mds_coord == mds1) %>% dplyr::select(chrom) %>% unique() %>% pull()
     chr2 <- outlier_windows %>% filter(mds_coord == mds2) %>% dplyr::select(chrom) %>% unique() %>% pull()
     if (chr1 != chr2){next;}
@@ -333,7 +335,6 @@ for (mds1 in unique(outlier_windows$mds_coord)){
 }
 
 #Check pairs with high correlation and pull out the mds that has fewer outlier windows.
-total_mds_coords <- unique(outlier_windows$mds_coord)
 min_cor <- 0.9
 
 for (i in 1:nrow(correlated_mds)){
@@ -342,7 +343,7 @@ for (i in 1:nrow(correlated_mds)){
     count2 <- mds_counts %>% filter(mds_coord == as.character(correlated_mds[i,2])) %>% pull(n_outliers)
     if (count1 < count2){
       total_mds_coords[which(total_mds_coords != as.character(correlated_mds[i,1]))] -> total_mds_coords
-    }else if(count1 >= count2){
+    }else{
       total_mds_coords[which(total_mds_coords != as.character(correlated_mds[i,2]))] -> total_mds_coords
     }
   }
