@@ -10,10 +10,6 @@ library(ggExtra)
 library(grid)
 library(spdep)
 
-devtools::install_github("petrelharp/local_pca/lostruct")
-
-
-
 
 data_directory <- "/media/owens/Copper/wild_gwas_2018/petiolaris/"
 data_name <- "Petiolaris.tranche90.snp.gwas.90.bi"
@@ -578,3 +574,22 @@ dev.off()
 write_tsv(outlier_windows, paste(data_name,".",window_size,".mds_cluster_windows.txt",sep=""))
 write_tsv(cluster_genotypes, paste(data_name,".",window_size,".mds_cluster_genotyped.txt",sep=""))
 write_tsv(inversion_stats,  paste(data_name,".",window_size,".inversion_stats.txt",sep=""))
+
+
+
+
+###Scratch pad
+
+
+
+
+out.rotation %>%
+  inner_join(.,heterozygosity) %>% 
+  inner_join(.,labels) %>%  
+  #filter(species == "PetPet") %>%
+  full_join(., read_tsv("dune_sample_info.txt")) %>% 
+#  full_join(., read_tsv("Petiolaris.tranche90.snp.petpet.90.bi.500.mds_cluster_genotyped.txt") %>% 
+#              filter(mds_coord == "mds02-pos") %>%
+#              select(-PC1,-mds_coord)) %>%
+  ggplot(.,aes(x=PC1,y=PC2)) + geom_point(aes(color=ecotype),size=4) + theme_bw() +
+  scale_color_viridis_d()
