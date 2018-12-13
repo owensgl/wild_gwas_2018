@@ -8,15 +8,19 @@ use Parallel::ForkManager;
 my $input_file = $ARGV[0]; #Should be a gzvcf file
 my $tmp_prefix = $ARGV[1];
 
-my $ha412_ref = "/home/owens/ref/Ha412HOv2.0-20181130.fasta";
-my $xrq_ref = "/home/owens/ref/HanXRQr1.0-20151230.fa";
-my $bwa = "/home/owens/bin/bwa-0.7.12/bwa";
+#SLURM COMMANDS to load before running this script:
+#system("module load samtools");
+#system("module load bcftools");
+#system("module load bwa");
+
+my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
+my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
+my $bwa = "bwa";
 my $bcftools = "bcftools";
 my $bases_surrounding=100; #Number of bases before and after the target site for blasting.
-my $min_bit = 250;
 my $counter = 0;
 my $ncores = 100; #Cores for fastq writing
-my $ncores_bwa = 10; #Cores for BWA
+my $ncores_bwa = 20; #Cores for BWA
 my $min_mq = 40;
 
 my $pm = new Parallel::ForkManager($ncores);
@@ -52,6 +56,7 @@ while(<INPUT>){
   my $pos = $a[1];
   my $start = $pos - $bases_surrounding;
   my $end = $pos + $bases_surrounding;
+  if ($start < 0){next;}
   open CMD,'-|',"samtools faidx $xrq_ref $chr:$start-$end" or die $@;
   my $line;
   my $seq;
@@ -208,11 +213,11 @@ foreach my $site (@unaligned_array){
 }
 my $sorted_vcf = "$tmp_prefix.remappedHa412.vcf.gz";
 #Sort using BCFtools
-system ("mkdir ./tmp");
+system ("mkdir ./tmp_$tmp_prefix");
 
-system("$bcftools sort -T ./tmp $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
+system("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
 #Clean up temporary files
 #system("rm $tmp_prefix.unsorted.vcf");
-#system("rm $tmp_prefix.fastq");
-#system("rm $tmp_prefix.sam"); 
+system("rm $tmp_prefix.fastq");
+system("rm $tmp_prefix.sam"); 
 
