@@ -1,7 +1,6 @@
 #!/bin/perl
 use warnings;
 use strict;
-use Parallel::ForkManager;
 
 #This script takes a vcf file, uses samtools to pull out the XRQ region, then blasts the HA412 genome and pulls out hits that are high enough.
 #It also prevents multiple sites from getting the same location (due to mapping issues). 
@@ -12,18 +11,20 @@ my $tmp_prefix = $ARGV[1];
 #system("module load samtools");
 #system("module load bcftools");
 #system("module load bwa");
+#system("module load bedtools");
 
-my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
-my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
-my $bwa = "bwa";
+#my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
+#my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
+my $ha412_ref = "/home/owens/ref/Ha412HOv2.0-20181130.fasta";
+my $xrq_ref = "/home/owens/ref/HanXRQr1.0-20151230.fa";
+
+my $bwa = "/home/owens/bin/bwa-0.7.12/bwa";
 my $bcftools = "bcftools";
 my $bases_surrounding=100; #Number of bases before and after the target site for blasting.
 my $counter = 0;
-my $ncores = 100; #Cores for fastq writing
 my $ncores_bwa = 20; #Cores for BWA
 my $min_mq = 40;
 
-my $pm = new Parallel::ForkManager($ncores);
 
 my @contig_list;
 open FASTA, $ha412_ref;
@@ -41,50 +42,68 @@ while(<FASTA>){
 
 #Turn SNPs into fastq of surrounding region
 open(INPUT, "gunzip -c $input_file |");
-open my $fastq, '>',  "$tmp_prefix.fastq";
-my $first_line;
-print STDERR "Converting SNP positions to fastq...\n";
+open my $bed, '>',  "$tmp_prefix.bed";
+print STDERR "Creating BED file of sites ...\n";
 while(<INPUT>){
   chomp;
   if ($_ =~ m/^#/){next;}
   my @a = split(/\t/,$_);
   $counter++;
-  if ($counter > 1){$first_line++;}
   my $chr = $a[0];
   if ($chr eq "chr"){next;}
-  $pm->start and next;
   my $pos = $a[1];
-  my $start = $pos - $bases_surrounding;
-  my $end = $pos + $bases_surrounding;
+  my $start = $pos - $bases_surrounding+1;  #+1 for bed
+  my $end = $pos + $bases_surrounding+2; #+2 for bed
   if ($start < 0){next;}
-  open CMD,'-|',"samtools faidx $xrq_ref $chr:$start-$end" or die $@;
-  my $line;
-  my $seq;
-  while (defined($line=<CMD>)) {
-    chomp($line);
-    if ($line =~ m/>/){next;}
-    $seq .= $line;
-  }
-  my $fastq_entry;
-  if($first_line){
-    $fastq_entry .= "\n";
-  }else{
-    $first_line++;
-  }
-  $fastq_entry .= "\@$chr:$pos:$start:$end\n";
-  $fastq_entry .= "$seq\n";
-  $fastq_entry .= "+\n";
-  my $qual_length = ((2*$bases_surrounding)+1);
-  foreach my $i (1..$qual_length){
-    $fastq_entry .= "H";
-  }
-  print $fastq "$fastq_entry";
-  if ($counter % 10000 == 0){print STDERR "Processed $chr\t$pos\n"}
-  $pm->finish
+  print $bed "$chr\t$start\t$end\n";
 }
-$pm->wait_all_children;
-close $fastq;
 close INPUT;
+close $bed;
+open my $fastq, '>', "$tmp_prefix.fastq";
+print STDERR "Using bedtools to create fasta of surrounding sequence..\n";
+system("bedtools getfasta -fi $xrq_ref -bed $tmp_prefix.bed -fo $tmp_prefix.fasta");
+print STDERR "Converting fasta to fastq for alignment...\n";
+open FASTA, "$tmp_prefix.fasta";
+my $even_odd_line = 1;
+my $previous_chr;
+my $previous_start;
+my $previous_end;
+my $previous_pos;
+my $first_line;
+while(<FASTA>){
+  chomp;
+  if ($even_odd_line % 2 == 1){ #It's the header line
+    my $header = $_;
+    $header =~ s/>//g;
+    my @info = split(/:/,$header);
+    my @start_end = split(/-/,$info[1]);
+    $previous_chr = $info[0];
+    $previous_start = $start_end[0];
+    $previous_end = $start_end[1];
+    $previous_pos = $previous_start + $bases_surrounding - 1;
+  }else{
+    my $seq = $_;
+    my $fastq_entry;
+    if($first_line){
+      $fastq_entry .= "\n";
+    }else{
+      $first_line++;
+    }
+    $fastq_entry .= "\@$previous_chr:$previous_pos:$previous_start:$previous_end\n";
+    $fastq_entry .= "$seq\n";
+    $fastq_entry .= "+\n";
+    my $qual_length = ((2*$bases_surrounding)+1);
+    foreach my $i (1..$qual_length){
+      $fastq_entry .= "H";
+    }
+    print $fastq "$fastq_entry";
+    if ($counter % 10000 == 0){print STDERR "Processed $previous_chr\t$previous_pos\n";}
+  }
+  $even_odd_line++;
+}
+
+close $fastq;
+close FASTA;
 
 print STDERR "Aligning SNP positions using BWA...\n";
 #Align to HA412 and pull out SNP position from mapping.
@@ -218,6 +237,8 @@ system ("mkdir ./tmp_$tmp_prefix");
 system("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
 #Clean up temporary files
 #system("rm $tmp_prefix.unsorted.vcf");
-system("rm $tmp_prefix.fastq");
-system("rm $tmp_prefix.sam"); 
+#system("rm $tmp_prefix.fasta");
+#system("rm $tmp_prefix.bed");
+#system("rm $tmp_prefix.fastq");
+#system("rm $tmp_prefix.sam"); 
 
