@@ -5,7 +5,7 @@ use warnings;
 #This script takes an fst file, it picks out the sites that are above an Fst threshold and records what alleles are for each group. It then uses a vcf file to record how many of each type of allele each sample has. 
 my $mds_fst_file = $ARGV[0]; #List of fst outliers
 my $gzvcf = $ARGV[1];
-my $min_freq = 0.95;
+#my $min_freq = 0.95;
 open MDS, $mds_fst_file;
 
 my %allele_1;
@@ -20,7 +20,7 @@ while(<MDS>){
   my $mds = $a[10];
   my $inv_0_allele = $a[8];
   my $inv_2_allele = $a[9];
-  if ($freq <= $min_freq){next;}
+#  if ($freq <= $min_freq){next;}
   $allele_1{$chr}{$pos}{$mds} = $inv_0_allele;
   $allele_2{$chr}{$pos}{$mds} = $inv_2_allele;
 }
