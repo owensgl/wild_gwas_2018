@@ -18,10 +18,10 @@ while(<MDS>){
   chomp;
   if ($. == 1){next;}
   my @a = split(/\t/,$_);
-  my $chr = $a[0];
-  my $pos = $a[1];
-  my $ha412_chr = $a[2];
-  my $ha412_pos = $a[3];
+  my $chr = $a[2];
+  my $pos = $a[3];
+  my $ha412_chr = $a[0];
+  my $ha412_pos = $a[1];
   $ha412_chr{$chr.$pos}= $ha412_chr;
   $ha412_pos{$chr.$pos}= $ha412_pos;
   my $inv_0_allele = $a[7];

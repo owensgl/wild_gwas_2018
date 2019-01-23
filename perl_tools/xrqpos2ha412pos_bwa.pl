@@ -13,12 +13,12 @@ my $tmp_prefix = $ARGV[1];
 #system("module load bwa");
 #system("module load bedtools");
 
-#my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
-#my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
-my $ha412_ref = "/home/owens/ref/Ha412HOv2.0-20181130.fasta";
-my $xrq_ref = "/home/owens/ref/HanXRQr1.0-20151230.fa";
+my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
+my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
+#my $ha412_ref = "/home/owens/ref/Ha412HOv2.0-20181130.fasta";
+#my $xrq_ref = "/home/owens/ref/HanXRQr1.0-20151230.fa";
 
-my $bwa = "/home/owens/bin/bwa-0.7.12/bwa";
+my $bwa = "bwa";
 my $bcftools = "bcftools";
 my $bases_surrounding=100; #Number of bases before and after the target site for blasting.
 my $counter = 0;
