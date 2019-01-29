@@ -1,0 +1,1 @@
+chr	window	sample1	sample2	ibd_dist	sites

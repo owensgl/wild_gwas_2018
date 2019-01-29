@@ -7,7 +7,7 @@ use List::Util 'shuffle';
 
 my $info_file = "/scratch/gowens/wild_gwas/wild_gwas_2018/sample_info_apr_2018.tsv";
 my $inv_file = $ARGV[0];
-my $chosen_species = "Ann";
+my $chosen_species = $ARGV[1];
 my $chosen_type = "wild";
 open INFO, $info_file;
 
@@ -21,7 +21,7 @@ while(<INFO>){
   my $species = $a[3];
   my $pop = $a[4];
   my $type = $a[5];
-  if ($species ne $chosen_species){next;}
+  unless ($species =~ m/$chosen_species/){next;}
   if ($type ne $chosen_type){next;}
   if ($pop eq "NA"){next;}
   $pop{$sample} = $pop;
