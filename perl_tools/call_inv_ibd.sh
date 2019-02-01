@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --account=rpp-rbruskie
-#SBATCH --time=4:00:00
+#SBATCH --time=1:00:00
 #SBATCH --job-name=Inv_ibd
-#SBATCH --array=12-60%50
+#SBATCH --array=54,55,57%50
 #SBATCH --mem=120G
 #SBATCH --nodes=1
 #SBATCH --ntasks=32
