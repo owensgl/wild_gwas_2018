@@ -40,7 +40,7 @@ foreach my $chr (sort keys %chr){
    my $command = "bcftools view -r $chr:$start-$end $vcfgz -O v | perl $vcfconverter > $outprefix.$chr.$start.fasta";
    system($command);
    my $raxml_command = "/home/gowens/bin/standard-RAxML/raxmlHPC-PTHREADS-AVX -m ASC_GTRGAMMA --asc-corr lewis -s $outprefix.$chr.$start.fasta -T 2 -p 10920 -x 10920 -# 100 -n $outprefix.$chr.$start.1.tree";
-   system($command);
+   system($raxml_command);
    $pm->finish;
   }
 }
