@@ -4,11 +4,12 @@ use strict;
 
 #This script takes a vcf file, uses samtools to pull out the XRQ region, then blasts the HA412 genome and pulls out hits that are high enough.
 #It also prevents multiple sites from getting the same location (due to mapping issues). 
+#Usage: perl xrqpos2ha412pos_bwa.pl input.vcf.gz output
+
 my $input_file = $ARGV[0]; #Should be a gzvcf file
 my $tmp_prefix = $ARGV[1];
 
 #SLURM COMMANDS to load before running this script:
-#system("module load samtools");
 #system("module load bcftools");
 #system("module load bwa");
 #system("module load bedtools");
@@ -22,7 +23,7 @@ my $bwa = "bwa";
 my $bcftools = "bcftools";
 my $bases_surrounding=100; #Number of bases before and after the target site for blasting.
 my $counter = 0;
-my $ncores_bwa = 20; #Cores for BWA
+my $ncores_bwa = 6; #Cores for BWA
 my $min_mq = 40;
 
 
