@@ -13,7 +13,8 @@ Ha412HOChr12	NA	pos1	NA	syn1
 Ha412HOChr13	NA	pos6	NA	syn1
 Ha412HOChr14	pos1	NA	pos1	syn1
 Ha412HOChr14	pos2	neg1	NA	syn2
-Ha412HOChr16	pos3	pos2	pos1	syn1
+Ha412HOChr16	pos3	pos2	NA	syn1
+Ha412HOChr16	NA	NA	pos1	syn2
 Ha412HOChr17	pos1	neg1	pos2	syn1
 Ha412HOChr17	NA	pos1	NA	syn2
 Ha412HOChr17	NA	NA	pos3	syn3
