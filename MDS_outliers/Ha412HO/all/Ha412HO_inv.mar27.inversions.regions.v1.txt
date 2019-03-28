@@ -29,7 +29,6 @@ group	start	end	chr	spe	species	dataset	mds
 1	161242043	190205715	Ha412HOChr10	argophyllus	Argophyllus	gwas	neg1
 2	190279711	190295665	Ha412HOChr10	argophyllus	Argophyllus	gwas	neg1
 3	190339415	190694486	Ha412HOChr10	argophyllus	Argophyllus	gwas	neg1
-1	15054101	64301922	Ha412HOChr14	argophyllus	Argophyllus	gwas	pos1
 1	202452179	204242807	Ha412HOChr16	argophyllus	Argophyllus	gwas	pos3
 2	204537714	204629966	Ha412HOChr16	argophyllus	Argophyllus	gwas	pos3
 3	205197484	205209334	Ha412HOChr16	argophyllus	Argophyllus	gwas	pos3
