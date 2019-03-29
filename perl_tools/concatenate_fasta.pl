@@ -13,10 +13,11 @@ while(<STDIN>){
   chomp;
   my $file = $_;
   open FILE, $file;
-  my $seq_length;
+  my $seq_length = 0;
   my $sample;
   while(<FILE>){
     chomp;
+    next if /^\s*$/;
     if ($_ =~ m/>/){
       $sample = $_;
       $samples{$sample}++;
@@ -26,6 +27,7 @@ while(<STDIN>){
     }
   }
   close FILE;
+  if ($seq_length == 0){next;}
   my $partion_start = $current_partion_start + 1;
   my $partion_end = $current_partion_start + $seq_length;
   print $partition_file "DNA, $file = $partion_start-$partion_end\n";
