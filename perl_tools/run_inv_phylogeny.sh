@@ -53,8 +53,8 @@ fi
 if [ ! -f group_2.txt ]
 then
 #Get list of samples appropriate for each inversion test
-cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 2) && ($4 > 0.9)' | shuf | head -n 5 | cut -f 1 > group_2.txt
-cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 0) && ($4 < 0.1)' | shuf | head -n 5 | cut -f 1 > group_0.txt
+cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 2) && ($4 > 0.85)' | shuf | head -n 5 | cut -f 1 > group_2.txt
+cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 0) && ($4 < 0.15)' | shuf | head -n 5 | cut -f 1 > group_0.txt
 cat group_0.txt group_2.txt $other_samples > $chr.$mds.samplelist.txt
 
 #Get HA412 genes in inversion region
