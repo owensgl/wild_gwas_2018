@@ -4,7 +4,7 @@ use strict;
 
 #This script takes a vcf file, uses samtools to pull out the XRQ region, then blasts the HA412 genome and pulls out hits that are high enough.
 #It also prevents multiple sites from getting the same location (due to mapping issues). 
-#Usage: perl xrqpos2ha412pos_bwa.pl input.vcf.gz output
+#Usage: perl xrqpos2ha412pos_bwa.pl input.vcf.gz output_prefix
 
 my $input_file = $ARGV[0]; #Should be a gzvcf file
 my $tmp_prefix = $ARGV[1];
@@ -35,6 +35,7 @@ while(<FASTA>){
     my $contig = $_;
     $contig =~ s/\>//g;
     $contig =~ s/ /, /g;
+    $contig =~ s/len/length/g;
     push(@contig_list,$contig);
   }
 }
@@ -234,8 +235,8 @@ foreach my $site (@unaligned_array){
 my $sorted_vcf = "$tmp_prefix.remappedHa412.vcf.gz";
 #Sort using BCFtools
 system ("mkdir ./tmp_$tmp_prefix");
-
 system("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
+system("tabix -p vcf $sorted_vcf");
 #Clean up temporary files
 #system("rm $tmp_prefix.unsorted.vcf");
 #system("rm $tmp_prefix.fasta");
