@@ -53,8 +53,8 @@ fi
 if [ ! -f group_2.txt ]
 then
 #Get list of samples appropriate for each inversion test
-cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 2) && ($4 > 0.9)' | shuf | head -n 5 | cut -f 1 > group_2.txt
-cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 0) && ($4 < 0.1)' | shuf | head -n 5 | cut -f 1 > group_0.txt
+cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 2) && ($4 > 0.85)' | shuf | head -n 5 | cut -f 1 > group_2.txt
+cat $wild_gwas_git/MDS_outliers/Ha412HO/$species/Ha412HO_inv.$inversion_version.pcasites.$chr.$mds.genotypes.txt | awk '($2 != "NA") && ($6 == 0) && ($4 < 0.15)' | shuf | head -n 5 | cut -f 1 > group_0.txt
 cat group_0.txt group_2.txt $other_samples > $chr.$mds.samplelist.txt
 
 #Get HA412 genes in inversion region
@@ -69,7 +69,7 @@ do
 	zcat $Ha412_genes | perl $wild_gwas_git/perl_tools/pull_out_genes.pl $region_chr $region_start $region_end >> inversion.ha412.genes.txt
 done	
 #Get orthologous XRQ genes
-cat $wild_gwas_git/resources/Ha412HO_HanXRQv1.1to1ortho.txt | grep -f inversion.ha412.genes.txt | cut -f 1 | tr -d ' '  > inversion.xrq.genes.txt
+cat $wild_gwas_git/resources/Ha412HO_HanXRQv1.1to1ortho.txt | grep -f inversion.ha412.genes.txt | cut -f 2 | tr -d ' '  > inversion.xrq.genes.txt
 cat $wild_gwas_git/resources/HanXRQr1.0-20151230-EGN-r1.1.genelocations.txt | grep -f inversion.xrq.genes.txt  > inversion.xrq.genes.locations.txt
 
 fi
@@ -78,10 +78,8 @@ then
 #Make tested trees
 	perl $wild_gwas_git/perl_tools/create_test_phylogenies.pl $species_abbreviation group_0.txt group_2.txt $other_samples $wild_gwas_git/resources/sample_info_file_all_samples_2018_12_07.tsv > $species.testtrees.treel
 fi
-
 #Make all the fasta files
-bash $wild_gwas_git/perl_tools/make_all_fasta.sh $chr.$mds.samplelist.txt $species.testtrees.treel $wild_gwas_git/perl_tools $iqtree $test_trees $xrq_ref $wild_gwas_git/resources/sample_info_file_all_samples_2018_12_07.tsv
-
+bash $wild_gwas_git/perl_tools/make_all_fasta.sh $chr.$mds.samplelist.txt $species.testtrees.treel $wild_gwas_git/perl_tools $iqtree $outgroups $test_trees $xrq_ref $wild_gwas_git/resources/sample_info_file_all_samples_2018_12_07.tsv
 ls | grep merged | grep fasta | perl $wild_gwas_git/perl_tools/concatenate_fasta.pl > $chr.$mds.fasta
 if [ $make_trees == "TRUE" ]
 then
