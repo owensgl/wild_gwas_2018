@@ -43,7 +43,7 @@ petfal	Petiolaris	petfal	17	2	pos	0.15	1
 petfal	Petiolaris	petfal	17	3	pos	0.15	1
 petiolaris	Petiolaris	petPF	1	1	neg	-0.15	2
 petiolaris	Petiolaris	petPF	5	1	neg	-0.15	2
-petiolaris	Petiolaris	petPF	6	2	neg	-0.1	1	
+petiolaris	Petiolaris	petPF	6	2	neg	-0.1	1
 petiolaris	Petiolaris	petPF	7	2	neg	-0.15	1
 petiolaris	Petiolaris	petPF	8	2	pos	0.25	1
 petiolaris	Petiolaris	petPF	9	1	neg	-0.1	2
