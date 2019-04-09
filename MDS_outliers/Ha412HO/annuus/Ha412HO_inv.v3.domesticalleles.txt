@@ -1,0 +1,12 @@
+spe	species	dataset	chr	mds	direction	threshold	n_blocks	domestic_allele
+annuus	Annuus	env	1	1	neg	-0.4	1	NA
+annuus	Annuus	env	5	1	pos	0	1	NA
+annuus	Annuus	env	11	1	pos	0	1	0
+annuus	Annuus	env	13	1	pos	0.05	1	2
+annuus	Annuus	env	13	2	pos	0.3	1	0
+annuus	Annuus	env	14	1	neg	-0.375	1	0
+annuus	Annuus	env	14	4	neg	-0.3	1	2
+annuus	Annuus	env	15	1	pos	0.2	1	0
+annuus	Annuus	env	16	1	neg	-0.2	1	2
+annuus	Annuus	env	16	2	pos	0.18	1	2
+annuus	Annuus	env	17	2	neg	-0.2	1	2
