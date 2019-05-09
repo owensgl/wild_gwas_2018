@@ -1,0 +1,507 @@
+IQ-TREE multicore version 1.6.10 for Linux 64-bit built Feb 19 2019
+Developed by Bui Quang Minh, Nguyen Lam Tung, Olga Chernomor,
+Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    cdr625.int.cedar.computecanada.ca (AVX2, FMA3, 251 GB RAM)
+Command: /home/gowens/bin/iqtree-1.6.10-Linux/bin/iqtree -s Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta -m GTR+ASC -bb 1000 -nt 5 -redo
+Seed:    801430 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Wed May  8 22:07:36 2019
+Kernel:  AVX+FMA - 5 threads (32 CPU cores detected)
+
+Reading alignment file Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Alignment has 355 sequences with 60595 columns, 60563 distinct patterns
+54569 parsimony-informative, 6026 singleton sites, 0 constant sites
+          Gap/Ambiguity  Composition  p-value
+   1  GSD1009     7.47%    passed     95.03%
+   2  GSD1039     6.81%    passed     69.24%
+   3  GSD1139     7.24%    passed     61.70%
+   4  GSD1169     6.04%    passed     80.40%
+   5  GSD1184     5.76%    passed     97.21%
+   6  GSD1258     7.04%    passed     83.30%
+   7  GSD1276     6.24%    passed     96.11%
+   8  GSD1329     5.39%    passed     97.26%
+   9  GSD1375    11.17%    passed     74.31%
+  10  GSD1573     6.34%    passed     99.76%
+  11  GSD1707     8.39%    passed     95.86%
+  12  GSD1732     6.25%    passed     87.46%
+  13  GSD1795     6.24%    passed     99.71%
+  14  GSD2067     6.42%    passed     99.47%
+  15  GSD2252    10.22%    passed     60.94%
+  16  GSD983     10.12%    passed     57.71%
+  17  MON014      9.03%    passed     60.75%
+  18  MON151      9.74%    passed     92.42%
+  19  MON220     11.66%    passed     64.50%
+  20  MON263     12.40%    passed     77.81%
+  21  MON308     11.53%    passed     46.68%
+  22  MON365     11.26%    passed     47.10%
+  23  MON401     10.91%    passed     74.25%
+  24  MON459     12.68%    passed     34.32%
+  25  MON520     11.03%    passed     72.33%
+  26  MON564      9.57%    passed     25.56%
+  27  MON606      9.53%    passed     49.65%
+  28  MON658      9.83%    passed     54.36%
+  29  MON713      9.22%    passed     59.98%
+  30  MON768      8.91%    passed     64.43%
+  31  MON818     13.04%    passed     91.60%
+  32  PET0301    10.44%    passed     73.74%
+  33  PET0302     9.63%    passed     67.88%
+  34  PET0303     8.74%    passed     99.85%
+  35  PET0304    10.31%    passed     84.07%
+  36  PET0305     9.88%    passed     87.79%
+  37  PET0306     7.73%    passed     85.70%
+  38  PET0307    11.23%    passed     82.90%
+  39  PET0308     7.73%    passed     64.95%
+  40  PET0309N   10.36%    passed     99.47%
+  41  PET0310    10.72%    passed     32.56%
+  42  PET0311     8.87%    passed     98.24%
+  43  PET0312     9.39%    passed     71.36%
+  44  PET0313     9.39%    passed     97.79%
+  45  PET0314     9.72%    passed     61.25%
+  46  PET0315    10.13%    passed     76.48%
+  47  PET0316    13.12%    passed     12.08%
+  48  PET0317     9.96%    passed     97.38%
+  49  PET0318    10.20%    passed     67.71%
+  50  PET0319     9.40%    passed     88.59%
+  51  PET0320     9.79%    passed     87.18%
+  52  PET0321     9.84%    passed     92.21%
+  53  PET0322     9.78%    passed     88.63%
+  54  PET0323    10.02%    passed     96.15%
+  55  PET0324    10.04%    passed     80.24%
+  56  PET0325    10.63%    passed     62.75%
+  57  PET0326    10.19%    passed     99.35%
+  58  PET0327    10.20%    passed     75.78%
+  59  PET0328    10.17%    passed     62.57%
+  60  PET0329    10.26%    passed     60.61%
+  61  PET0330     9.91%    passed     80.27%
+  62  PET0331     9.94%    passed     92.80%
+  63  PET0332    10.11%    passed     98.18%
+  64  PET0333    10.09%    passed     62.92%
+  65  PET0334    10.16%    passed     99.73%
+  66  PET0335    10.45%    passed     74.73%
+  67  PET0336     8.28%    passed     73.68%
+  68  PET0337    10.80%    passed     67.79%
+  69  PET0338    10.02%    passed     55.03%
+  70  PET0339    10.06%    passed     77.33%
+  71  PET0340    10.39%    passed     49.76%
+  72  PET0341     8.90%    passed     98.21%
+  73  PET0342    10.09%    passed     65.53%
+  74  PET0343    13.73%    failed      1.15%
+  75  PET0344    10.35%    passed     90.56%
+  76  PET0345     7.91%    passed     50.54%
+  77  PET0346    10.20%    passed     31.22%
+  78  PET0347    10.85%    passed     90.20%
+  79  PET0348    10.64%    passed     84.17%
+  80  PET0349    10.67%    passed     52.03%
+  81  PET0350    10.14%    passed     82.40%
+  82  PET0351    10.01%    passed     67.25%
+  83  PET0352     9.71%    passed     37.30%
+  84  PET0353    10.84%    passed     67.90%
+  85  PET0354     6.98%    passed     41.88%
+  86  PET0355     9.63%    passed     68.52%
+  87  PET0356     9.36%    passed     78.16%
+  88  PET0357    10.46%    passed     67.46%
+  89  PET0358     9.99%    passed     74.14%
+  90  PET0359     9.90%    passed     89.73%
+  91  PET0360     9.74%    passed     23.06%
+  92  PET0361N    9.85%    passed     54.00%
+  93  PET0362     9.65%    passed     29.84%
+  94  PET0363    12.53%    passed     83.26%
+  95  PET0364     9.84%    passed     62.49%
+  96  PET0365    10.32%    passed     57.17%
+  97  PET0366     9.70%    passed     95.60%
+  98  PET0367     9.78%    passed     36.33%
+  99  PET0368     9.86%    passed     79.67%
+ 100  PET0369     9.27%    passed     33.56%
+ 101  PET0370     9.74%    passed     73.16%
+ 102  PET0371     9.74%    passed     76.93%
+ 103  PET0372     9.70%    passed     26.18%
+ 104  PET0373    10.51%    passed     11.41%
+ 105  PET0374     7.64%    passed     21.21%
+ 106  PET0375     9.94%    passed     32.44%
+ 107  PET0376    10.16%    passed     18.24%
+ 108  PET0377    10.02%    passed     32.64%
+ 109  PET0378    10.03%    passed     34.78%
+ 110  PET0379     9.76%    passed     70.89%
+ 111  PET0380     7.98%    passed     41.85%
+ 112  PET0381    10.17%    passed     70.77%
+ 113  PET0382     9.87%    passed     85.16%
+ 114  PET0383    10.27%    passed     54.34%
+ 115  PET0384     7.95%    passed     62.51%
+ 116  PET0385    10.36%    passed     44.72%
+ 117  PET0386    10.23%    passed     63.27%
+ 118  PET0388     9.57%    passed     81.03%
+ 119  PET0391N   10.05%    passed     61.73%
+ 120  PET0392N    9.87%    passed     35.51%
+ 121  PET0393    10.35%    passed     98.95%
+ 122  PET0394    10.37%    passed     54.80%
+ 123  PET0395     9.97%    passed     34.38%
+ 124  PET0396    10.29%    passed     58.15%
+ 125  PET0397     9.46%    passed     54.77%
+ 126  PET0398    12.55%    passed     27.95%
+ 127  PET0399    10.77%    passed     70.45%
+ 128  PET0400    10.29%    passed     87.93%
+ 129  PET0401     9.28%    passed     41.13%
+ 130  PET0402     9.78%    passed     81.24%
+ 131  PET0403     9.07%    passed     56.75%
+ 132  PET0404     9.60%    passed     61.77%
+ 133  PET0405     8.83%    passed     71.05%
+ 134  PET0406     9.23%    passed     60.26%
+ 135  PET0407     9.26%    passed     50.00%
+ 136  PET0409     7.09%    failed      0.97%
+ 137  PET0410     9.80%    passed     75.23%
+ 138  PET0412     7.22%    passed     39.90%
+ 139  PET0413     9.24%    passed     74.08%
+ 140  PET0414    10.07%    passed     87.26%
+ 141  PET0415     9.32%    passed     83.39%
+ 142  PET0416     9.19%    passed     70.82%
+ 143  PET0417     9.24%    passed     30.24%
+ 144  PET0418     9.42%    passed     38.17%
+ 145  PET0419     9.47%    passed     43.46%
+ 146  PET0420    10.05%    passed     77.64%
+ 147  PET0421     9.91%    passed     66.09%
+ 148  PET0422     8.94%    passed     87.55%
+ 149  PET0423     9.32%    passed     94.56%
+ 150  PET0424     8.96%    passed     99.45%
+ 151  PET0425     9.17%    passed     78.51%
+ 152  PET0427     9.82%    passed     73.44%
+ 153  PET0428     9.60%    passed     98.13%
+ 154  PET0429     9.65%    passed     74.44%
+ 155  PET0430     9.43%    passed     96.36%
+ 156  PET0431     9.60%    passed     66.97%
+ 157  PET0432     9.68%    passed     53.98%
+ 158  PET0433     9.89%    passed     65.96%
+ 159  PET0434    10.18%    passed     75.37%
+ 160  PET0435     9.92%    passed     32.56%
+ 161  PET0436     9.80%    passed     69.59%
+ 162  PET0437     9.47%    passed     42.76%
+ 163  PET0438     8.95%    passed     87.18%
+ 164  PET0439    11.66%    passed     68.06%
+ 165  PET0440    10.34%    passed     51.52%
+ 166  PET0441     9.63%    passed     11.50%
+ 167  PET0442     9.70%    passed      6.01%
+ 168  PET0443     9.36%    passed     42.85%
+ 169  PET0444     8.77%    passed     10.12%
+ 170  PET0445     9.31%    passed     15.22%
+ 171  PET0446     8.90%    passed     12.57%
+ 172  PET0447     9.39%    passed     16.01%
+ 173  PET0448     9.20%    passed     17.62%
+ 174  PET0449     8.71%    passed     31.77%
+ 175  PET0450     8.52%    passed     32.68%
+ 176  PET0451     9.20%    passed     10.38%
+ 177  PET0452     9.46%    passed     18.11%
+ 178  PET0453N    6.49%    passed     69.93%
+ 179  PET0454N    9.32%    passed     30.84%
+ 180  PET0456     9.61%    passed     33.98%
+ 181  PET0457     9.54%    passed     27.22%
+ 182  PET0458     9.38%    passed     61.13%
+ 183  PET0459N    9.65%    passed     33.01%
+ 184  PET0460N    9.03%    passed     12.67%
+ 185  PET0461     6.49%    passed     86.87%
+ 186  PET0463     9.42%    passed     19.05%
+ 187  PET0464     8.98%    passed     94.73%
+ 188  PET0466     9.49%    passed     41.60%
+ 189  PET0467     9.14%    passed     26.59%
+ 190  PET0468     9.68%    passed     74.76%
+ 191  PET0470     8.89%    passed     49.31%
+ 192  PET0471     9.61%    passed     38.07%
+ 193  PET0472     9.61%    passed     66.31%
+ 194  PET0473N   10.27%    passed     32.86%
+ 195  PET0474N    9.31%    passed     20.60%
+ 196  PET0477     9.75%    passed     43.51%
+ 197  PET0480     9.26%    passed     46.88%
+ 198  PET0481     9.26%    passed     88.17%
+ 199  PET0482     9.30%    passed     18.98%
+ 200  PET0483     9.84%    passed     30.58%
+ 201  PET0484     9.50%    passed     47.54%
+ 202  PET0485     9.79%    passed     53.74%
+ 203  PET0486     9.94%    passed     71.49%
+ 204  PET0487     9.58%    passed     25.29%
+ 205  PET0488    10.18%    passed     70.05%
+ 206  PET0490     9.70%    passed     21.15%
+ 207  PET0494     9.86%    passed     46.93%
+ 208  PET0495     9.38%    passed     47.42%
+ 209  PET0496    10.22%    passed     22.29%
+ 210  PET0497     9.47%    passed     31.84%
+ 211  PET0503     9.21%    passed     23.27%
+ 212  PET0504     9.83%    passed     13.34%
+ 213  PET0505     5.95%    passed     24.64%
+ 214  PET0507     7.92%    passed     96.73%
+ 215  PET0509     9.66%    passed     14.45%
+ 216  PET0511     6.16%    passed     89.33%
+ 217  PET0513     9.06%    passed     19.88%
+ 218  PET0516     7.76%    passed     37.15%
+ 219  PET0517     9.75%    passed     53.92%
+ 220  PET0518     9.27%    passed     21.46%
+ 221  PET0519     9.99%    passed     28.91%
+ 222  PET0520     9.33%    passed     34.63%
+ 223  PET0521     4.95%    passed     98.01%
+ 224  PET0522     6.74%    passed     97.16%
+ 225  PET0523     6.58%    passed     96.26%
+ 226  PET0524     6.47%    passed     95.53%
+ 227  PET0526     9.77%    passed     15.11%
+ 228  PET0529     9.73%    passed     37.48%
+ 229  PET0531     6.83%    passed     99.30%
+ 230  PET0532     5.98%    passed     13.39%
+ 231  PET0534N    9.74%    passed     83.80%
+ 232  PET0536     6.02%    passed     80.36%
+ 233  PET0543     6.99%    passed     94.66%
+ 234  PET0544     9.87%    passed     66.12%
+ 235  PET0545     9.58%    passed     28.92%
+ 236  PET0546     9.41%    passed     70.70%
+ 237  PET0549     8.09%    passed     89.94%
+ 238  PET0550     6.80%    passed     99.49%
+ 239  PET0552     6.66%    passed     98.33%
+ 240  PET0553     7.07%    passed     96.89%
+ 241  PET0554     6.81%    passed     97.41%
+ 242  PET0555    11.60%    passed     50.01%
+ 243  PET0556     7.21%    passed     97.46%
+ 244  PET0558     6.78%    passed     95.49%
+ 245  PET0559     7.66%    passed     92.53%
+ 246  PET0560     7.49%    passed     95.94%
+ 247  PET0561     6.72%    passed     96.94%
+ 248  PET0562     4.52%    passed     78.77%
+ 249  PET0564     6.24%    passed     89.00%
+ 250  PET0565     6.93%    passed     96.83%
+ 251  PET0566     7.54%    passed     72.37%
+ 252  PET0568     7.14%    passed     96.81%
+ 253  PET0571     7.09%    passed     95.82%
+ 254  PET0572     7.47%    passed     96.69%
+ 255  PET0573     7.41%    passed     84.74%
+ 256  PET0579     6.34%    passed     86.86%
+ 257  PET0581     6.85%    passed     90.01%
+ 258  PET0584     7.68%    passed     89.64%
+ 259  PET0586     5.52%    passed     65.57%
+ 260  PET0587     6.72%    passed     86.08%
+ 261  PET0590     9.41%    passed     59.60%
+ 262  PET0591     7.06%    passed     54.64%
+ 263  PET0592     7.62%    passed     89.04%
+ 264  PET0596     4.32%    passed      9.52%
+ 265  PET0597     6.98%    passed     93.72%
+ 266  PET0599     7.15%    passed     97.77%
+ 267  PET0602     9.02%    passed     45.39%
+ 268  PET0604     9.73%    passed     74.04%
+ 269  PET0609    10.04%    passed     60.51%
+ 270  PET0610     9.56%    passed     43.09%
+ 271  PET0611     9.62%    passed     40.97%
+ 272  PET0612     7.41%    passed     32.71%
+ 273  PET0613     6.18%    passed     19.06%
+ 274  PET0614     9.34%    passed     36.27%
+ 275  PET0615     9.95%    passed     39.53%
+ 276  PET0616     9.95%    passed     60.62%
+ 277  PET0617     8.98%    passed     79.01%
+ 278  PET0618    10.14%    passed     83.17%
+ 279  PET0619    10.28%    passed     70.28%
+ 280  PET0620     9.87%    passed     88.38%
+ 281  PET0621     9.92%    passed     70.48%
+ 282  PET0622     6.64%    passed     52.23%
+ 283  PET0623    10.05%    passed     22.04%
+ 284  PET0624     6.13%    passed     31.34%
+ 285  PET0625    10.00%    passed     55.45%
+ 286  PET0626    10.46%    passed     75.02%
+ 287  PET0627     9.57%    passed     73.74%
+ 288  PET0628    91.94%    passed     18.12%
+ 289  PET0629     9.91%    passed     69.02%
+ 290  PET0630     6.02%    passed     35.78%
+ 291  PET0631     6.69%    passed     54.80%
+ 292  PET0632    10.04%    passed     84.96%
+ 293  PET0633     9.33%    passed     78.57%
+ 294  PET0634     9.89%    passed     86.65%
+ 295  PET0635    10.14%    passed     22.88%
+ 296  PET0636     9.94%    passed     93.11%
+ 297  PET0637    10.02%    passed     45.59%
+ 298  PET0638    10.07%    passed     69.00%
+ 299  PET0639     9.35%    passed     20.45%
+ 300  PET0640     9.95%    passed     69.53%
+ 301  PET0641    10.29%    passed     52.00%
+ 302  PET0642    11.34%    passed     30.40%
+ 303  PET0643     9.76%    passed     73.09%
+ 304  PET0644     8.38%    passed     48.30%
+ 305  PET0645    10.39%    passed     89.16%
+ 306  PET0646    10.50%    passed     74.17%
+ 307  PET0647     9.93%    passed     73.78%
+ 308  PET0718    10.18%    passed     83.65%
+ 309  PET0719    10.15%    passed     42.36%
+ 310  PET0720    10.08%    passed     34.82%
+ 311  PET0721     9.40%    passed     91.18%
+ 312  PET0722     9.88%    passed     74.26%
+ 313  PET0723     9.34%    passed     36.52%
+ 314  PET0724    10.05%    passed     72.78%
+ 315  PET0725    10.24%    passed     54.60%
+ 316  PET0726    10.28%    passed     33.54%
+ 317  PET0727     9.79%    passed     61.20%
+ 318  PET0748     9.56%    passed     80.34%
+ 319  PET0749N    9.01%    passed     79.39%
+ 320  PET0750     9.26%    passed     80.45%
+ 321  PET0751     9.40%    passed     93.01%
+ 322  PET0752     8.68%    passed     42.71%
+ 323  PET0753     9.39%    passed     80.96%
+ 324  PET0754     9.84%    passed     91.72%
+ 325  PET0755N    9.41%    passed     83.74%
+ 326  PET0756N    8.41%    passed     62.23%
+ 327  PET0757     9.92%    passed     50.67%
+ 328  PET0758     9.42%    passed     94.78%
+ 329  PET0759     6.68%    passed     90.74%
+ 330  PET0763    16.91%    failed      0.00%
+ 331  PET0765     9.29%    passed     58.05%
+ 332  PET0766     9.77%    passed     75.05%
+ 333  PET0767     9.54%    passed     54.37%
+ 334  PET0768     9.08%    passed     65.61%
+ 335  PET0769     9.55%    passed     53.40%
+ 336  PET0770     9.77%    passed     76.08%
+ 337  PET0774N    9.40%    passed     54.91%
+ 338  PET0775     9.06%    passed     74.58%
+ 339  PET0776     9.19%    passed     45.33%
+ 340  PET0777     9.17%    passed     47.25%
+ 341  PET0778     8.30%    passed     70.39%
+ 342  PET0780N    9.65%    passed     66.53%
+ 343  PET0784     9.00%    passed     82.80%
+ 344  PET0785     8.69%    passed     51.63%
+ 345  PET0787     6.33%    passed     94.59%
+ 346  PET0788    14.67%    passed     10.25%
+ 347  PET0789     9.74%    passed     78.58%
+ 348  PET0790    10.14%    passed     96.01%
+ 349  PET0791     9.77%    passed     29.53%
+ 350  PET0793    10.14%    passed     68.39%
+ 351  PET0794     9.57%    passed     72.28%
+ 352  PET0795     9.59%    passed     78.18%
+ 353  PET0796     9.37%    passed     91.19%
+ 354  PET0797     9.48%    passed     48.27%
+ 355  PET0800     9.83%    passed     62.11%
+WARNING: 1 sequences contain more than 50% gaps/ambiguity
+****  TOTAL       9.49%  3 sequences failed composition chi2 test (p-value<5%; df=3)
+
+Create initial parsimony tree by phylogenetic likelihood library (PLL)... 8.349 seconds
+Generating 1000 samples for ultrafast bootstrap (seed: 801430)...
+Ascertainment bias correction: 4 unobservable constant patterns
+
+NOTE: 928 MB RAM (0 GB) is required!
+Estimate model parameters (epsilon = 0.100)
+1. Initial log-likelihood: -3401190.564
+2. Current log-likelihood: -3143911.621
+3. Current log-likelihood: -3143749.317
+Optimal log-likelihood: -3143749.261
+Rate parameters:  A-C: 0.92547  A-G: 5.08113  A-T: 1.43928  C-G: 0.69947  C-T: 5.13032  G-T: 1.00000
+Base frequencies:  A: 0.282  C: 0.223  G: 0.219  T: 0.276
+Parameters optimization took 3 rounds (25.758 sec)
+Computing ML distances based on estimated model parameters... 557.968 sec
+Computing BIONJ tree...
+0.418 seconds
+Log-likelihood of BIONJ tree: -3158904.782
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Generating 98 parsimony trees... 1036.454 second
+Computing log-likelihood of 98 initial trees ... 186.067 seconds
+Current best score: -3143278.348
+
+Do NNI search on 20 best initial trees
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 1: -3142961.075
+Iteration 10 / LogL: -3143434.283 / Time: 0h:25m:46s
+Iteration 20 / LogL: -3143495.990 / Time: 0h:28m:9s
+Finish initializing candidate tree set (20)
+Current best tree score: -3142961.075 / CPU time: 1520.485
+Number of iterations: 20
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Iteration 30 / LogL: -3143418.379 / Time: 0h:31m:11s (1h:15m:58s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 36: -3142914.118
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 38: -3142816.992
+Iteration 40 / LogL: -3143327.252 / Time: 0h:34m:47s (1h:27m:1s left)
+Iteration 50 / LogL: -3143572.614 / Time: 0h:38m:16s (1h:8m:26s left)
+Log-likelihood cutoff on original alignment: -3143729.152
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 57: -3142673.595
+Iteration 60 / LogL: -3142868.193 / Time: 0h:41m:42s (1h:8m:18s left)
+Iteration 70 / LogL: -3142967.703 / Time: 0h:44m:57s (0h:56m:28s left)
+Iteration 80 / LogL: -3143542.376 / Time: 0h:48m:12s (0h:46m:50s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 87: -3142670.075
+Iteration 90 / LogL: -3143155.203 / Time: 0h:51m:32s (0h:56m:0s left)
+Iteration 100 / LogL: -3143010.582 / Time: 0h:54m:44s (0h:47m:58s left)
+Log-likelihood cutoff on original alignment: -3143729.152
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.992
+Iteration 110 / LogL: -3142970.151 / Time: 0h:58m:4s (0h:47m:48s left)
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 111: -3142661.148
+Iteration 120 / LogL: -3142901.636 / Time: 1h:1m:34s (0h:46m:58s left)
+Iteration 130 / LogL: -3142896.573 / Time: 1h:5m:6s (0h:40m:46s left)
+Iteration 140 / LogL: -3143248.921 / Time: 1h:8m:27s (0h:34m:52s left)
+Iteration 150 / LogL: -3143083.528 / Time: 1h:11m:29s (0h:29m:12s left)
+Log-likelihood cutoff on original alignment: -3143729.152
+Iteration 160 / LogL: -3142905.686 / Time: 1h:14m:7s (0h:23m:43s left)
+Iteration 170 / LogL: -3143551.974 / Time: 1h:16m:56s (0h:18m:37s left)
+Iteration 180 / LogL: -3143552.925 / Time: 1h:19m:28s (0h:13m:44s left)
+Iteration 190 / LogL: -3143477.751 / Time: 1h:22m:10s (0h:9m:6s left)
+Iteration 200 / LogL: -3142996.795 / Time: 1h:25m:12s (0h:4m:42s left)
+Log-likelihood cutoff on original alignment: -3143729.152
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.995
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 205: -3142541.285
+Iteration 210 / LogL: -3143412.166 / Time: 1h:28m:42s (0h:40m:15s left)
+Iteration 220 / LogL: -3142712.910 / Time: 1h:31m:58s (0h:35m:38s left)
+Iteration 230 / LogL: -3143070.392 / Time: 1h:35m:6s (0h:31m:5s left)
+Iteration 240 / LogL: -3142862.606 / Time: 1h:38m:16s (0h:26m:40s left)
+Iteration 250 / LogL: -3143223.384 / Time: 1h:40m:53s (0h:22m:15s left)
+Log-likelihood cutoff on original alignment: -3143729.152
+Iteration 260 / LogL: -3142995.608 / Time: 1h:43m:30s (0h:17m:57s left)
+Iteration 270 / LogL: -3143880.344 / Time: 1h:46m:15s (0h:13m:48s left)
+Iteration 280 / LogL: -3143468.461 / Time: 1h:49m:0s (0h:9m:45s left)
+Iteration 290 / LogL: -3143971.912 / Time: 1h:51m:57s (0h:5m:48s left)
+Iteration 300 / LogL: -3143677.970 / Time: 1h:54m:54s (0h:1m:55s left)
+Log-likelihood cutoff on original alignment: -3143654.539
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.995
+TREE SEARCH COMPLETED AFTER 306 ITERATIONS / Time: 1h:56m:40s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -3142541.285
+2. Current log-likelihood: -3142541.225
+3. Current log-likelihood: -3142541.176
+4. Current log-likelihood: -3142541.143
+5. Current log-likelihood: -3142541.106
+6. Current log-likelihood: -3142541.079
+7. Current log-likelihood: -3142541.056
+8. Current log-likelihood: -3142541.041
+9. Current log-likelihood: -3142541.028
+10. Current log-likelihood: -3142541.017
+Optimal log-likelihood: -3142541.008
+Rate parameters:  A-C: 0.92707  A-G: 5.10592  A-T: 1.44671  C-G: 0.70062  C-T: 5.16015  G-T: 1.00000
+Base frequencies:  A: 0.282  C: 0.223  G: 0.219  T: 0.276
+Parameters optimization took 10 rounds (35.249 sec)
+BEST SCORE FOUND : -3142541.008
+Creating bootstrap support values...
+Split supports printed to NEXUS file Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.splits.nex
+Total tree length: 9.641
+
+Total number of iterations: 306
+CPU time used for tree search: 30334.279 sec (8h:25m:34s)
+Wall-clock time used for tree search: 6831.620 sec (1h:53m:51s)
+Total CPU time used: 31258.869 sec (8h:40m:58s)
+Total wall-clock time used: 7037.038 sec (1h:57m:17s)
+
+Computing bootstrap consensus tree...
+Reading input file Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.splits.nex...
+355 taxa and 2344 splits.
+Consensus tree written to Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.contree
+Reading input trees file Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.contree
+Log-likelihood of consensus tree: -3142697.973
+
+Analysis results written to: 
+  IQ-TREE report:                Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.iqtree
+  Maximum-likelihood tree:       Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.treefile
+  Likelihood distances:          Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.mldist
+
+Ultrafast bootstrap approximation results written to:
+  Split support values:          Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.splits.nex
+  Consensus tree:                Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.contree
+  Screen log file:               Petiolaris.tranche90.snp.petPF.90.bi.remappedHa412HO.Ha412HOChr05.syn1.fasta.log
+
+Date and Time: Thu May  9 00:05:07 2019
