@@ -54,6 +54,24 @@ my $tmp_prefix = shift(@ARGV);
 if (!$input_file || !$tmp_prefix) {
   pod2usage({ -message => "Missing arguments", -verbose => 1, -exit => 2});
 }
+
+sub nofail {
+  my ($cmd) = @_;
+  print STDERR "CMD: $cmd\n";
+  system($cmd);
+  if ($? == -1) {
+    print STDERR "CMD:   failed to execute: $!\n";
+  }
+  elsif ($? & 127) {
+    printf STDERR "CMD:   child died with signal %d, %s coredump\n",
+	($? & 127),  ($? & 128) ? 'with' : 'without';
+  }
+  else {
+    printf STDERR "CMD:   child exited with value %d\n", $? >> 8;
+  }
+  return 0;
+}
+  
 #SLURM COMMANDS to load before running this script:
 #system("module load bcftools");
 #system("module load bwa");
@@ -116,7 +134,7 @@ if ($counter == 0) {
 
 open my $fastq, '>', "$tmp_prefix.fastq";
 print STDERR "Using bedtools to create fasta of surrounding sequence..\n";
-system("bedtools getfasta -fi $xrq_ref -bed $tmp_prefix.bed -fo $tmp_prefix.fasta");
+nofail("bedtools getfasta -fi $xrq_ref -bed $tmp_prefix.bed -fo $tmp_prefix.fasta");
 print STDERR "Converting fasta to fastq for alignment...\n";
 open FASTA, "$tmp_prefix.fasta";
 my $even_odd_line = 1;
@@ -162,7 +180,7 @@ close FASTA;
 
 print STDERR "Aligning SNP positions using BWA...\n";
 #Align to HA412 and pull out SNP position from mapping.
-system("$bwa mem -t $ncores_bwa $ha412_ref $tmp_prefix.fastq > $tmp_prefix.sam");
+nofail("$bwa mem -t $ncores_bwa $ha412_ref $tmp_prefix.fastq > $tmp_prefix.sam");
 open SAM, "$tmp_prefix.sam";
 $counter=0;
 print STDERR "Pulling SNP positions from SAM file...\n";
@@ -287,9 +305,9 @@ foreach my $site (@unaligned_array){
 }
 my $sorted_vcf = "$tmp_prefix.remappedHa412.vcf.gz";
 #Sort using BCFtools
-system ("mkdir ./tmp_$tmp_prefix");
-system("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
-system("tabix -p vcf $sorted_vcf");
+nofail("mkdir ./tmp_$tmp_prefix");
+nofail("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
+nofail("tabix -p vcf $sorted_vcf");
 #Clean up temporary files
 #system("rm $tmp_prefix.unsorted.vcf");
 #system("rm $tmp_prefix.fasta");
