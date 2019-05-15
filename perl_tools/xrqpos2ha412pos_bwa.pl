@@ -109,6 +109,11 @@ while(<INPUT>){
 }
 close INPUT;
 close $bed;
+
+if ($counter == 0) {
+  die("Invalid input file given.");
+}
+
 open my $fastq, '>', "$tmp_prefix.fastq";
 print STDERR "Using bedtools to create fasta of surrounding sequence..\n";
 system("bedtools getfasta -fi $xrq_ref -bed $tmp_prefix.bed -fo $tmp_prefix.fasta");
