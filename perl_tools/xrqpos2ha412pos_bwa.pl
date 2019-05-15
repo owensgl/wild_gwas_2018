@@ -1,15 +1,59 @@
 #!/usr/bin/env perl
 # -*- cperl-indent-level: 2; perl-indent-level: 2; -*-
+
 use warnings;
 use strict;
+use Getopt::Long;
+use Pod::Usage;
 
-#This script takes a vcf file, uses samtools to pull out the XRQ region, then blasts the HA412 genome and pulls out hits that are high enough.
-#It also prevents multiple sites from getting the same location (due to mapping issues). 
-#Usage: perl xrqpos2ha412pos_bwa.pl input.vcf.gz output_prefix
+# VERSION 1
 
-my $input_file = $ARGV[0]; #Should be a gzvcf file
-my $tmp_prefix = $ARGV[1];
+=head1 SYNOPSIS
 
+  xrqpos2ha412pos_bwa.pl [--help] INPUTVCFGZ OUTPUTPREFIX
+
+=head1 DESCRIPTION
+
+
+  This script takes the input vcf file, uses samtools to pull out the
+  XRQ regions (for each SNP in the input, a small window
+  around the position in the XRQ reference is selected). These regions are blasted on the HA412 genome (with bwa),
+  and pulls out hits with enough mapping quality.
+
+  A side effect of this mapping process is that sites which map to the
+  same location on Ha412 will be eliminated (due to resulting low
+  quality mappings).
+
+  Arguments:
+
+     INPUTVCFGZ   path to a .vcf.gz file containing SNPs
+
+     OUTPUTPREFIX basename used as a prefix for temporary and final output
+                  files. output files are written in the current directory.
+
+=head1 OUTPUT
+
+    OUTPUTPREFIX.remappedHa412.vcf.gz (+ .tbi)
+
+       A VCF file with all input positions remapped to Ha412 positions
+       identified via Blast.
+
+    OUTPUTPREFIX.Ha412conversionstats.txt
+
+       Consult this file to get statistics on quality of remapping.
+=cut
+
+my $help = 0;
+GetOptions(
+  'help'    => \$help,
+);
+if ($help) { pod2usage(-verbose => 2, -exit => 1); }
+
+my $input_file = shift(@ARGV);
+my $tmp_prefix = shift(@ARGV);
+if (!$input_file || !$tmp_prefix) {
+  pod2usage({ -message => "Missing arguments", -verbose => 1, -exit => 2});
+}
 #SLURM COMMANDS to load before running this script:
 #system("module load bcftools");
 #system("module load bwa");
