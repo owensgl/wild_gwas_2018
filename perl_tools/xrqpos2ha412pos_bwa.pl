@@ -59,10 +59,13 @@ if (!$input_file || !$tmp_prefix) {
 #system("module load bwa");
 #system("module load bedtools");
 
-my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
-my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
+my $ha412_ref = $ENV{'HA412_REF'} // "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
+my $xrq_ref   = $ENV{'XRQ_REF'}   // "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
 #my $ha412_ref = "/home/owens/ref/Ha412HOv2.0-20181130.fasta";
 #my $xrq_ref = "/home/owens/ref/HanXRQr1.0-20151230.fa";
+
+print STDERR "Using reference: HA412 $ha412_ref\n";
+print STDERR "Using reference: XRQ   $xrq_ref\n";
 
 my $bwa = "bwa";
 my $bcftools = "bcftools";
