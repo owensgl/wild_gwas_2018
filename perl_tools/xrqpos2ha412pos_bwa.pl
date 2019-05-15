@@ -75,6 +75,7 @@ my $ncores_bwa = 6; #Cores for BWA
 my $min_mq = 40;
 
 
+print STDERR "Reading contig listfrom fasta...";
 my @contig_list;
 open FASTA, $ha412_ref;
 while(<FASTA>){
@@ -87,8 +88,7 @@ while(<FASTA>){
     push(@contig_list,$contig);
   }
 }
-
-
+print STDERR "..done.\n";
 
 #Turn SNPs into fastq of surrounding region
 open(INPUT, "gunzip -c $input_file |");
