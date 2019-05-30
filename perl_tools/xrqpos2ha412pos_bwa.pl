@@ -1,23 +1,89 @@
-#!/bin/perl
+#!/usr/bin/env perl
+# -*- cperl-indent-level: 2; perl-indent-level: 2; -*-
+
 use warnings;
 use strict;
+use Getopt::Long;
+use Pod::Usage;
 
-#This script takes a vcf file, uses samtools to pull out the XRQ region, then blasts the HA412 genome and pulls out hits that are high enough.
-#It also prevents multiple sites from getting the same location (due to mapping issues). 
-#Usage: perl xrqpos2ha412pos_bwa.pl input.vcf.gz output_prefix
+# VERSION 1
 
-my $input_file = $ARGV[0]; #Should be a gzvcf file
-my $tmp_prefix = $ARGV[1];
+=head1 SYNOPSIS
 
+  xrqpos2ha412pos_bwa.pl [--help] INPUTVCFGZ OUTPUTPREFIX
+
+=head1 DESCRIPTION
+
+
+  This script takes the input vcf file, uses samtools to pull out the
+  XRQ regions (for each SNP in the input, a small window
+  around the position in the XRQ reference is selected). These regions are blasted on the HA412 genome (with bwa),
+  and pulls out hits with enough mapping quality.
+
+  A side effect of this mapping process is that sites which map to the
+  same location on Ha412 will be eliminated (due to resulting low
+  quality mappings).
+
+  Arguments:
+
+     INPUTVCFGZ   path to a .vcf.gz file containing SNPs
+
+     OUTPUTPREFIX basename used as a prefix for temporary and final output
+                  files. output files are written in the current directory.
+
+=head1 OUTPUT
+
+    OUTPUTPREFIX.remappedHa412.vcf.gz (+ .tbi)
+
+       A VCF file with all input positions remapped to Ha412 positions
+       identified via Blast.
+
+    OUTPUTPREFIX.Ha412conversionstats.txt
+
+       Consult this file to get statistics on quality of remapping.
+=cut
+
+my $help = 0;
+GetOptions(
+  'help'    => \$help,
+);
+if ($help) { pod2usage(-verbose => 2, -exit => 1); }
+
+my $input_file = shift(@ARGV);
+my $tmp_prefix = shift(@ARGV);
+if (!$input_file || !$tmp_prefix) {
+  pod2usage({ -message => "Missing arguments", -verbose => 1, -exit => 2});
+}
+
+sub nofail {
+  my ($cmd) = @_;
+  print STDERR "CMD: $cmd\n";
+  system($cmd);
+  if ($? == -1) {
+    print STDERR "CMD:   failed to execute: $!\n";
+  }
+  elsif ($? & 127) {
+    printf STDERR "CMD:   child died with signal %d, %s coredump\n",
+	($? & 127),  ($? & 128) ? 'with' : 'without';
+  }
+  else {
+    printf STDERR "CMD:   child exited with value %d\n", $? >> 8;
+  }
+  return 0;
+}
+  
 #SLURM COMMANDS to load before running this script:
 #system("module load bcftools");
 #system("module load bwa");
 #system("module load bedtools");
 
-my $ha412_ref = "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
-my $xrq_ref = "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
+my $ha412_ref = $ENV{'HA412_REF'} // "/scratch/gowens/ref/Ha412HOv2.0-20181130.fasta";
+my $xrq_ref   = $ENV{'XRQ_REF'}   // "/scratch/gowens/ref/HanXRQr1.0-20151230.fa";
 #my $ha412_ref = "/home/owens/ref/Ha412HOv2.0-20181130.fasta";
 #my $xrq_ref = "/home/owens/ref/HanXRQr1.0-20151230.fa";
+
+print STDERR "Using reference: HA412 $ha412_ref\n";
+print STDERR "Using reference: XRQ   $xrq_ref\n";
 
 my $bwa = "bwa";
 my $bcftools = "bcftools";
@@ -27,6 +93,7 @@ my $ncores_bwa = 6; #Cores for BWA
 my $min_mq = 40;
 
 
+print STDERR "Reading contig listfrom fasta...";
 my @contig_list;
 open FASTA, $ha412_ref;
 while(<FASTA>){
@@ -39,8 +106,7 @@ while(<FASTA>){
     push(@contig_list,$contig);
   }
 }
-
-
+print STDERR "..done.\n";
 
 #Turn SNPs into fastq of surrounding region
 open(INPUT, "gunzip -c $input_file |");
@@ -61,9 +127,14 @@ while(<INPUT>){
 }
 close INPUT;
 close $bed;
+
+if ($counter == 0) {
+  die("Invalid input file given.");
+}
+
 open my $fastq, '>', "$tmp_prefix.fastq";
 print STDERR "Using bedtools to create fasta of surrounding sequence..\n";
-system("bedtools getfasta -fi $xrq_ref -bed $tmp_prefix.bed -fo $tmp_prefix.fasta");
+nofail("bedtools getfasta -fi $xrq_ref -bed $tmp_prefix.bed -fo $tmp_prefix.fasta");
 print STDERR "Converting fasta to fastq for alignment...\n";
 open FASTA, "$tmp_prefix.fasta";
 my $even_odd_line = 1;
@@ -109,7 +180,7 @@ close FASTA;
 
 print STDERR "Aligning SNP positions using BWA...\n";
 #Align to HA412 and pull out SNP position from mapping.
-system("$bwa mem -t $ncores_bwa $ha412_ref $tmp_prefix.fastq > $tmp_prefix.sam");
+nofail("$bwa mem -t $ncores_bwa $ha412_ref $tmp_prefix.fastq > $tmp_prefix.sam");
 open SAM, "$tmp_prefix.sam";
 $counter=0;
 print STDERR "Pulling SNP positions from SAM file...\n";
@@ -234,9 +305,9 @@ foreach my $site (@unaligned_array){
 }
 my $sorted_vcf = "$tmp_prefix.remappedHa412.vcf.gz";
 #Sort using BCFtools
-system ("mkdir ./tmp_$tmp_prefix");
-system("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
-system("tabix -p vcf $sorted_vcf");
+nofail("mkdir ./tmp_$tmp_prefix");
+nofail("$bcftools sort -T ./tmp_$tmp_prefix $tmp_prefix.unsorted.vcf -O z > $sorted_vcf");
+nofail("tabix -p vcf $sorted_vcf");
 #Clean up temporary files
 #system("rm $tmp_prefix.unsorted.vcf");
 #system("rm $tmp_prefix.fasta");
