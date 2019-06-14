@@ -127,4 +127,94 @@ dev.off()
 
 write_delim(ibd.dat, "Argophyllus.tranche90.snp.gwas.90.bi.ldr0p2.kinship.txt")
 
+##############################################
+#Without inversions
+##############################################
+
+folder <- "/media/owens/Copper/wild_gwas_2018/argophyllus/"
+gds.file <- "Argophyllus.tranche90.snp.gwas.90.bi.remappedHa412HO.v3noinv.ldfilter.gds"
+vcf.file <- "Argophyllus.tranche90.snp.gwas.90.bi.remappedHa412HO.v3noinv.ldfilter.vcf.gz"
+snpgdsVCF2GDS(paste(folder,vcf.file,sep="/"), paste(folder,gds.file,sep="/"), method="biallelic.only", ignore.chr.prefix = "Ha412HOChr")
+
+genofile <- snpgdsOpen(paste(folder,gds.file,sep="/"))
+set.seed(1000)
+snpset <- snpgdsLDpruning(genofile, ld.threshold=0.2,method="r", num.thread=10)
+snpset.id <- unlist(snpset)
+
+pca <- snpgdsPCA(genofile, snp.id=snpset.id, num.thread=10, 
+                 eigen.cnt = 0)
+
+#Write eigenvectors and eigenvalues
+write(pca$eigenval, "Argophyllus.tranche90.snp.gwas.90.bi.remappedHa412HO.v3noinv.ldfilter.ldr0p2.eigenvalues.txt",
+      ncol=length(pca$eigenval))
+
+
+write.table(pca$eigenvect, "Argophyllus.tranche90.snp.gwas.90.bi.remappedHa412HO.v3noinv.ldfilter.ldr0p2.eigenvectors.txt",
+            col.names = F,row.names = F
+)
+
+
+
+pc.percent <- pca$varprop*100
+labels <- read_tsv("/home/owens/working/sample_info_apr_2018.tsv",col_names = T)
+pop_loc <- read_tsv("pop_loc_allnum.txt")
+pop_loc %>% rename(population = pop) %>% inner_join(.,labels) -> labels
+
+snpgdsClose(genofile)
+
+
+#Plotting PCAs
+pdf("Argophyllus.tranche90.snp.gwas.90.bi.remappedHa412HO.v3noinv.ldfilter.ldr0p2.pca.pdf",height=6,width=14)
+for (i in seq(1,20,2)){
+  j <- i +1
+  tab <- data.frame(name = pca$sample.id,
+                    EV1 = pca$eigenvect[,i],  
+                    EV2 = pca$eigenvect[,j],    
+                    
+                    stringsAsFactors = FALSE)
+  inner_join(tab, labels) -> tab
+  lat <- ggplot(tab) + geom_point(aes(x=EV1,y=EV2,col=lat),size=3, alpha=0.5) +
+    scale_color_viridis(name="Latitude") + theme_bw() +
+    ylab(paste("PC",j," (",round(pc.percent[j],3)," PVE)",sep="")) +
+    xlab(paste("PC",i," (",round(pc.percent[i],3)," PVE)",sep=""))
+  long <- ggplot(tab) + geom_point(aes(x=EV1,y=EV2,col=long),size=3, alpha=0.5) +
+    scale_color_viridis(name="Longitude") + theme_bw() +
+    ylab(paste("PC",j," (",round(pc.percent[j],3)," PVE)",sep="")) +
+    xlab(paste("PC",i," (",round(pc.percent[i],3)," PVE)",sep=""))
+  alt <- ggplot(tab) + geom_point(aes(x=EV1,y=EV2,col=alt),size=3,alpha=0.5) +
+    scale_color_viridis(name="Altitude") + theme_bw() +
+    ylab(paste("PC",j," (",round(pc.percent[j],3)," PVE)",sep="")) +
+    xlab(paste("PC",i," (",round(pc.percent[i],3)," PVE)",sep=""))
+  print(
+    grid.arrange(lat, long, alt, nrow= 1)
+  )
+}
+dev.off()
+
+#Saving PCAs
+tab <- data.frame(name = pca$sample.id,
+                  PC1 = pca$eigenvect[,1],  
+                  PC2 = pca$eigenvect[,2],    
+                  PC3 = pca$eigenvect[,3],  
+                  PC4 = pca$eigenvect[,4],
+                  PC5 = pca$eigenvect[,5],  
+                  PC6 = pca$eigenvect[,6],
+                  PC7 = pca$eigenvect[,7],  
+                  PC8 = pca$eigenvect[,8],
+                  PC9 = pca$eigenvect[,9],  
+                  PC10 = pca$eigenvect[,10],
+                  PC11 = pca$eigenvect[,11],  
+                  PC12 = pca$eigenvect[,12],
+                  PC13 = pca$eigenvect[,13],  
+                  PC14 = pca$eigenvect[,14],
+                  PC15 = pca$eigenvect[,15],  
+                  PC16 = pca$eigenvect[,16],
+                  PC17 = pca$eigenvect[,17],  
+                  PC18 = pca$eigenvect[,18],
+                  PC19 = pca$eigenvect[,19],  
+                  PC20 = pca$eigenvect[,20],
+                  stringsAsFactors = FALSE)
+
+write_tsv(tab, "Argophyllus.tranche90.snp.gwas.90.bi.remappedHa412HO.v3noinv.ldfilter.ldr0p2.pca.txt")
+
 

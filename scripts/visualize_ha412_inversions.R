@@ -3,9 +3,10 @@ library(zoo)
 library(SNPRelate)
 library(grid)
 library(gridExtra)
+library(plotly)
 #Visualize candidate inversions from lostruct
 
-inversions <- read_tsv("Ha412HO_inv.dec11.txt")
+inversions <- read_tsv("MDS_outliers/Ha412HO/all/Ha412HO_inv.jan09.txt")
 data_directory <- "/media/owens/Copper/wild_gwas_2018"
 window_size <- "100"
 chr_prefix <- "Ha412HOChr"
@@ -13,9 +14,9 @@ het_script <- "/home/owens/bin/pop_gen/vcf2het.pl"
 labels <- read_tsv("/home/owens/working/sample_info_apr_2018.tsv",col_names = T) 
 pop_loc <- read_tsv("pop_loc_allnum.txt")
 pop_loc %>% rename(population = pop) %>% inner_join(.,labels) %>% rename(sample = name) -> labels
+info <- read_tsv("sample_info_apr_2018.tsv") %>% rename(sample = name)
 
-
-n <- 1
+n <- 49
 
 genotypes <- tibble(sample=character(),EV1=character(),
                     EV2=character(),cluster=character(),
@@ -25,10 +26,13 @@ regions <- tibble(group=character(),start=character(),
                   end=character(),chr=character(),
                   spe=character(), species=character(),
                   dataset=character(),mds=character())
-pdf("Ha412HO_inv.dec11.inversions.v1.pdf",height=10,width=15)
+pdf("MDS_outliers/Ha412HO/all/Ha412HO_inv.jan09.inversions.v1.pdf",height=10,width=15)
 for (n in 1:nrow(inversions)){
   
   win.regions <- readRDS(paste(
+    "MDS_plots/Ha412HO/",
+    pull(inversions[n,1]),
+    "/",
     pull(inversions[n,2]),
     ".tranche90.snp.",
     pull(inversions[n,3]),
@@ -176,6 +180,14 @@ for (n in 1:nrow(inversions)){
     scale_shape(name="Kmeans\ncluster") +
     theme(legend.position="bottom")
   
+  # tab %>% 
+  #   inner_join(.,info) %>%
+  #   ggplot(.,aes(x=EV1,y=EV2)) + geom_point(aes(color=species,shape=as.factor(cluster)),size=2) +
+  #   theme_bw() + ggtitle(paste(" BetweenSS = ",betweenss, sep="")) + 
+  #   scale_color_brewer(palette = "Set1") +
+  #   scale_shape(name="Kmeans\ncluster") +
+  #   theme(legend.position="bottom")
+  
   
   #Define the map for each type
   if (pull(inversions[n,1]) == "annuus"){
@@ -255,12 +267,12 @@ for (n in 1:nrow(inversions)){
   genotypes <- rbind(genotypes,tab)
 }
 dev.off()
-write_tsv(genotypes,"Ha412HO_inv.dec11.inversions.genotypes.v1.txt")
-write_tsv(regions,"Ha412HO_inv.dec11.inversions.regions.v1.txt")
+write_tsv(genotypes,"Ha412HO_inv.jan09.inversions.genotypes.v1.txt")
+write_tsv(regions,"Ha412HO_inv.jan09.inversions.regions.v1.txt")
 
 chrlengths <- read_tsv("Ha412HO.chrlengths.txt")
 
-pdf("Ha412HO_inv.dec11.inversions.regions.v1.pdf",height=2,width=20)
+pdf("Ha412HO_inv.jan09.inversions.regions.v1.pdf",height=2,width=20)
 regions %>%
   filter(spe != "argophyllus" | chr !="Ha412HOChr14" | mds != "pos1") %>%
   filter(spe != "petpet" | chr !="Ha412HOChr16" | mds != "neg1") %>%
@@ -281,21 +293,21 @@ regions %>%
 dev.off()
 
 #Plotting Fst peaks. Collected using 
-#perl /home/owens/bin/pop_gen/run_vcf2inversionfst.pl /home/owens/bin/wild_gwas_2018/Ha412HO_inv.dec11.inversions.genotypes.v1.txt
+#perl /home/owens/bin/pop_gen/run_vcf2inversionfst.pl /home/owens/bin/wild_gwas_2018/Ha412HO_inv.jan09.inversions.genotypes.v1.txt
 library(changepoint)
-#/media/owens/Copper/wild_gwas_2018/argophyllus/Ha412HO_inv.dec11.argophyllus.Ha412HOChr03.pos2.fst.txt.gz
+#/media/owens/Copper/wild_gwas_2018/argophyllus/Ha412HO_inv.jan09.argophyllus.Ha412HOChr03.pos2.fst.txt.gz
 
 fst_regions <- tibble(group=character(),start=character(),
                       end=character(),chr=character(),
                       spe=character(),species=character(),
                       dataset=character(),mds=character())
-pdf("Ha412HO_inv.dec11.inversions.fstregions.v1.pdf",width=15,height=10)
+pdf("Ha412HO_inv.jan09.inversions.fstregions.v1.pdf",width=15,height=10)
 for (n in 1:nrow(inversions)){
   n_clusters <- inversions$n_blocks[n]
   fst <- read_tsv(paste(
     "/media/owens/Copper/wild_gwas_2018/",
     pull(inversions[n,1]),
-    "/Ha412HO_inv.dec11.",
+    "/Ha412HO_inv.jan09.",
     pull(inversions[n,1]),
     ".Ha412HOChr",
     sprintf("%02d",pull(inversions[n,4])),
@@ -430,5 +442,5 @@ for (n in 1:nrow(inversions)){
   )
 }
 dev.off()
-write_tsv(fst_regions,"Ha412HO_inv.dec11.inversions.fstregions.v1.txt")
+write_tsv(fst_regions,"Ha412HO_inv.jan09.inversions.fstregions.v1.txt")
 

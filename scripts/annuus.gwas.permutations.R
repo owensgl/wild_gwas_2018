@@ -19,6 +19,7 @@ inv_values <- tibble(snp_id=character(),beta=numeric(),se=numeric(),
 sig_snps <-  tibble(snp_id=character(),beta=numeric(),se=numeric(),
                     pvalue=numeric(),type=character(),trait=character())
 
+perm_pvalues <- tibble(trait=character(),pvalue=numeric())
 plot_list = list()
 perm_plot_list = list()
 for (i in 1:length(traits)){
@@ -26,14 +27,14 @@ for (i in 1:length(traits)){
   
   
   #trait <- "Leaf_total_N"
-  snps <- read_tsv(paste(directory,"/", "Annuus.tranche90.snp.gwas.90.bi.remappedHa412HO.beagle.jan09noinv.",trait,".ps.gz",sep=""),
+  snps <- read_tsv(paste(directory,"/annuus/emmax/", "Annuus.tranche90.snp.gwas.90.bi.remappedHa412HO.beagle.jan09noinv.",trait,".znorm.ps.gz",sep=""),
                    col_names = c("snp_id","beta","se","pvalue"))
   
   snps$type <- "snp"
   snps$trait <- trait
   sig_snps <- rbind(sig_snps,snps %>% filter(pvalue < 0.05))
   
-  inv <- read_tsv(paste(directory,"/", "Ha412HO_inv.jan09.pcasites.ANN.",trait,".ps",sep=""),
+  inv <- read_tsv(paste(directory,"/annuus/emmax/", "Ha412HO_inv.jan09.pcasites.annuus.",trait,".znorm.ps",sep=""),
                   col_names = c("snp_id","beta","se","pvalue"))
   
   
@@ -51,21 +52,20 @@ for (i in 1:length(traits)){
   }
   perm_pvalue <- sum(min_pvalue < min_inv_pvalue)/(n_perm+1)
   
-  perm_plot_list[[i]] <- ggplot(tibble(min_pvalue),aes(y=abs(log10(min_pvalue)),x=1)) + geom_boxplot() +
-    geom_hline(yintercept = abs(log10(min_inv_pvalue)),linetype="dashed") +
-    theme_bw() +
-    ylab("Permuted min p-value") + xlab("") +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank()) +
-    ggtitle(trait)
-  
-  
-  plot_list[[i]] <- rbind(snps,inv) %>%
-    ggplot(.,aes(abs(log10(pvalue)),fill=type)) + geom_density(alpha=0.5) +
-    theme_bw() + scale_fill_brewer(palette = "Set1") +
-    ggtitle(paste(trait,"\np-value =",round(perm_pvalue,3),sep=""))
-  
+  # perm_plot_list[[i]] <- ggplot(tibble(min_pvalue)) + 
+  #   geom_density(aes(abs(log10(min_pvalue)))) +
+  #   geom_vline(xintercept = abs(log10(min_inv_pvalue)),linetype="dashed") +
+  #   theme_bw() +
+  #   ylab("Density") + xlab("Minimum permuted log10(p-value)") +
+  #   ggtitle(paste(trait,"\np-value =",round(perm_pvalue,3),sep=""))
+  # 
+  # 
+  # plot_list[[i]] <- rbind(snps,inv) %>%
+  #   ggplot(.,aes(abs(log10(pvalue)),fill=type)) + geom_density(alpha=0.5) +
+  #   theme_bw() + scale_fill_brewer(palette = "Set1") +
+  #   ggtitle(paste(trait,"\np-value =",round(perm_pvalue,3),sep=""))
+  tmp <- tibble(trait=trait,pvalue=perm_pvalue)
+  perm_pvalues <- rbind(perm_pvalues, tmp)
 }
 
 
@@ -87,12 +87,19 @@ plot_inv_2 <- inv_values %>%
 
 write_tsv(inv_values, paste("gwas/",prefix,"invgwas.txt",sep=""))
 
+pdf(paste("gwas/",prefix,"invgwas.permpvalues.pdf",sep=""),height=4,width=6)
+perm_pvalues %>%
+  ggplot(.,aes(pvalue)) + geom_histogram() +
+  theme_bw() + ylab("Frequency") + xlab("p")
+dev.off()
 
 ###Testing for pleotropy
 sig_snps %>% 
   group_by(snp_id) %>%
   summarize(n_sig = n()) %>%
   mutate(type = "snp")-> sig_snp_counts
+
+p.adjust(perm_pvalues$pvalue,method="BH")
 
 inv_values %>%
   filter(pvalue < 0.05) %>%
@@ -107,7 +114,19 @@ plot_pleotropy <- rbind(sig_inv_counts, sig_snp_counts) %>%
   theme_bw() + 
   scale_fill_brewer(palette = "Set1") +
   ylab("Traits affected") +
-  ggtitle(paste("Pleotropy | p-value =", round(pleotropy_pvalue$p.value,3)))
+  ggtitle(paste("Pleiotropy | p-value =", round(pleotropy_pvalue$p.value,3)))
+
+pdf(paste("gwas/",prefix,"invgwas.permpleiotropy.pdf",sep=""),height=4,width=6)
+sig_snp_counts %>%
+  sample_n(10000) %>%
+  rbind(., sig_inv_counts) %>%
+  ggplot(.,aes(x=type, y=n_sig,fill=type)) + geom_boxplot() +
+  theme_bw() + 
+  scale_fill_brewer(palette = "Set1") +
+  ylab("Traits affected") +
+  ggtitle(paste("Pleiotropy | p-value =", round(pleotropy_pvalue$p.value,3)))
+dev.off()
+
 
 pdf(paste(prefix,"gwascomparison.pdf",sep=""),height=20,width=20)
 lay <- rbind(c(1,2,3,4,5),
