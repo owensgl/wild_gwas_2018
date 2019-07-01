@@ -3,7 +3,7 @@ library(ggthemes)
 library(ggExtra)
 library(ggpubr)
 
-directory <- "/media/owens/Copper/wild_gwas_2018/annuus"
+directory <- "/media/owens/Copper/wild_gwas/annuus"
 info <- read_tsv("Angsd_most_aDNA.sampleinfo.txt") %>%
   rename(sample = Beagle_ID)
 all_calls <- tibble(sample=character(),mds=character(),g00=numeric(),g01=numeric(),g11=numeric(),
@@ -18,7 +18,7 @@ for (n in 1:nrow(mds_list)){
   
   data <- read_tsv(paste(directory, "/Ha412HO_inv.jan09.annuus.",mds_chosen,".blackman.mostaDNA.txt.gz",sep=""))
 
-  pdf(paste("Ha412HO_inv.jan09.annuus.",mds_chosen,".blackman.mostaDNA.pdf",sep=""),height=6,width=9)
+  #pdf(paste("Ha412HO_inv.jan09.annuus.",mds_chosen,".blackman.mostaDNA.pdf",sep=""),height=6,width=9)
   print(
   data %>%
     inner_join(.,info) %>%
@@ -111,7 +111,7 @@ for (n in 1:nrow(mds_list)){
   
   )
 
-  dev.off()
+  #dev.off()
   all_calls <- rbind(all_calls,data_calls)
 }
 
@@ -126,6 +126,54 @@ all_calls %>%
   theme(axis.text.x=element_text(angle=60, hjust=1)) +
   scale_x_discrete(limits = bar_order)
 dev.off()
+
+pdf(paste("Ha412HO_inv.jan09.annuus.blackman.mostaDNA.june2019filtered.pdf",sep=""),height=6,width=9)
+chosen_mds = c( "Ha412HOChr05.pos1", "Ha412HOChr11.pos1", "Ha412HOChr13.pos1", "Ha412HOChr14.neg1", "Ha412HOChr15.pos1", "Ha412HOChr16.neg1")
+all_calls %>%
+  filter(mds %in% chosen_mds ) %>%
+  mutate(new_call = case_when(sample_call == 0 & total < 3 ~ "REMOVED",
+                                 sample_call == 2 & total < 3 ~ "REMOVED",
+                                 sample_call == 1 & total < 6 ~ "REMOVED",
+                                 TRUE ~ as.character(sample_call))) %>%  View()
+  ggplot(.,aes(x=Type,fill=as.factor(new_call),group=as.factor(new_call))) + 
+  geom_bar(position="fill",stat="count") +
+  scale_fill_brewer(palette = "Set1",name="Genotype") +
+  theme_few() +
+  facet_wrap(~mds) +
+  theme(axis.text.x=element_text(angle=60, hjust=1)) +
+  scale_x_discrete(limits = bar_order)
+all_calls %>%
+  filter(mds %in% chosen_mds ) %>%
+  mutate(new_call = case_when(sample_call == 0 & total < 3 ~ "REMOVED",
+                              sample_call == 2 & total < 3 ~ "REMOVED",
+                              sample_call == 1 & total < 6 ~ "REMOVED",
+                              TRUE ~ as.character(sample_call))) %>%  
+  mutate(new_call = na_if(new_call, "REMOVED")) %>%
+  ggplot(.,aes(x=Type,fill=as.factor(new_call),group=as.factor(new_call))) + 
+  geom_bar(position="fill",stat="count") +
+  scale_fill_brewer(palette = "Set1",name="Genotype") +
+  theme_few() +
+  facet_wrap(~mds) +
+  theme(axis.text.x=element_text(angle=60, hjust=1)) +
+  scale_x_discrete(limits = bar_order)
+all_calls %>%
+  filter(mds %in% chosen_mds ) %>%
+  mutate(new_call = case_when(sample_call == 0 & total < 3 ~ "REMOVED",
+                              sample_call == 2 & total < 3 ~ "REMOVED",
+                              sample_call == 1 & total < 6 ~ "REMOVED",
+                              TRUE ~ as.character(sample_call))) %>%  
+  mutate(new_call = na_if(new_call, "REMOVED")) %>%
+  filter(!is.na(new_call)) %>%
+  ggplot(.,aes(x=Type,fill=as.factor(new_call),group=as.factor(new_call))) + 
+  geom_bar(position="fill",stat="count") +
+  scale_fill_brewer(palette = "Set1",name="Genotype") +
+  theme_few() +
+  facet_wrap(~mds) +
+  theme(axis.text.x=element_text(angle=60, hjust=1)) +
+  scale_x_discrete(limits = bar_order)
+dev.off()
+
+
 
 pdf(paste("Ha412HO_inv.jan09.annuus.blackman.mostaDNA.markercounts.pdf",sep=""),height=6,width=9)
 all_calls %>%

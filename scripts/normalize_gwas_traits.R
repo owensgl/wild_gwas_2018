@@ -1,26 +1,32 @@
 library(tidyverse)
 #This is for Z-normalization the traits for GWAS
-species <- "petpet"
-traits <- c( "TLN", "LIR", "DTF","DTF_corrected","DTF_deduced",
-             "late_early","Stem_diamater_at_flowering",
-             "Plant_height_at_flowering", "Primary_branches",
-             "SLA_mm2_per_mg", "Leaf_total_N", "Leaf_total_C",
-             "Disk_diameter", "Petal_length", "Petal_width",
-             "Guides_3_petals", "Stem_colour", "Leaf_Area",
-             "Leaf_Maximum_height", "Phyllaries_length", 
-             "Phyllaries_width", "Seed_area", "Seed_HW_ratio")
+species_specific_list <- c("annuus","argophyllus","petpet","petfal")
+species_general_list <- c("Annuus","Argophyllus","Petiolaris","Petiolaris")
+tag_list <- c("gwas","gwas","petpet","petfal")
 
-
-phenotypes <- read_tsv(paste0("gwas/",species,"/",toupper(species),"_all_phenotypes_jan_2019.txt")) %>%
-  rename(sample = FID)
-
-for (i in 1:length(traits)){
-  chosen_trait <- traits[i]
-  tmp <- phenotypes %>% select(sample) %>% mutate(family = sample)
-  if (any(names(phenotypes) == chosen_trait)){
+for (i in 1:4){
+  species_specific <- species_specific_list[i]
+  species_general <- species_general_list[i]
+  tag <- tag_list[i]
+  samplelist <- read_tsv(paste0("/media/owens/Copper/wild_gwas/gwas/",species_specific,"/",species_general,
+                         ".tranche90.snp.",tag,".90.bi.samplelist.txt"),
+                         col_names=c("sample")) %>%
+    filter(sample != "ARG0300")
+  phenotypes <- read_tsv(paste0("resources/",tolower(species_general),"_all_phenotypes_May2019.txt")) %>%
+    rename(sample = FID) %>% semi_join(.,samplelist)
+    
+  traits <- colnames(phenotypes)[3:length(colnames(phenotypes))]
+  
+  for (x in 1:length(traits)){
+    chosen_trait <- traits[x]
+    tmp <- phenotypes %>% select(sample) %>% mutate(family = sample)
     print(paste("printing",chosen_trait))
-    tmp$trait <- phenotypes %>% select(!!chosen_trait) %>% pull() %>% scale()
-    write_tsv(tmp, paste("gwas/",species,"/",chosen_trait,".znorm.txt",sep=""),col_names = F)
+    tmp$trait <- phenotypes %>% select(!!chosen_trait) %>% pull() %>% as.numeric() %>% scale()
+    write_tsv(tmp, paste("gwas/",species_specific,"/",chosen_trait,".znorm.txt",sep=""),col_names = F)
+    tmp$trait <- phenotypes %>% select(!!chosen_trait) %>% pull() %>% as.numeric() 
+    write_tsv(tmp, paste("gwas/",species_specific,"/",chosen_trait,".txt",sep=""),col_names = F)
+    
   }
-
+  
+  
 }

@@ -4,18 +4,27 @@ library(viridis)
 library(gridExtra)
 library(purrr)
 
-folder <- "/media/owens/Copper/wild_gwas_2018/argophyllus/"
-gds.file <- "Petiolaris.tranche90.snp.petpet.90.bi.gds"
-vcf.file <- "Petiolaris.tranche90.snp.petpet.90.bi.vcf.gz"
+folder <- "/media/owens/Copper/wild_gwas/petiolaris/"
+gds.file <- "Petiolaris.tranche90.snp.petpet.90.bi.remappedHa412HO.gds"
+vcf.file <- "Petiolaris.tranche90.snp.petpet.90.bi.remappedHa412HO.vcf.gz"
 snpgdsVCF2GDS(paste(folder,vcf.file,sep="/"), paste(folder,gds.file,sep="/"), method="biallelic.only", ignore.chr.prefix = "HanXRQChr")
 
 genofile <- snpgdsOpen(paste(folder,gds.file,sep="/"))
 set.seed(1000)
-snpset <- snpgdsLDpruning(genofile, ld.threshold=0.2,method="r", num.thread=10)
+snpset <- snpgdsLDpruning(genofile, ld.threshold=0.2,method="r", num.thread=10,autosome.only = F)
 snpset.id <- unlist(snpset)
 
 pca <- snpgdsPCA(genofile, snp.id=snpset.id, num.thread=10, 
-                 eigen.cnt = 0)
+                 eigen.cnt = 0,autosome.only = F)
+
+#Write eigenvectors and eigenvalues
+write(pca$eigenval, "PCA/Petiolaris.tranche90.snp.petpet.90.bi.remappedHa412HO.ldr0p2.eigenvalues.txt",
+      ncol=length(pca$eigenval))
+
+
+write.table(pca$eigenvect, "PCA/Petiolaris.tranche90.snp.petpet.90.bi.remappedHa412HO.ldr0p2.eigenvectors.txt",
+            col.names = F,row.names = F)
+
 pc.percent <- pca$varprop*100
 labels <- read_tsv("/home/owens/working/sample_info_apr_2018.tsv",col_names = T)
 pop_loc <- read_tsv("pop_loc_allnum.txt")

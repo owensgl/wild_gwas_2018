@@ -152,3 +152,38 @@ for (i in 1:nrow(chr_lengths)){
 }
 dev.off()
 
+
+#Plotting for Ha412HOChr03g0144431
+pdf("var_out_annuus_2018_HA412_maf_0.03_all_covariates_BayPass_IS_STD.Ha412HOChr03g0144431.pdf",
+    height=20,width=8)
+ann.env.cum.long %>%
+  filter(chr == "Ha412HOChr03") %>%
+  filter(pos > 170000000) %>%
+  ggplot(.,aes(x=pos,y=bayesfactor)) + geom_point(size=0.5) + 
+  facet_wrap(~variable,ncol=1,scales="free_y") +
+  geom_vline(xintercept=180982749,linetype="dotted",color="red") +
+  geom_vline(xintercept=180998636,linetype="dotted",color="red") +
+  ggtitle("Ha412HOChr03g0144431")
+
+ann.env.cum.long %>%
+  filter(chr == "Ha412HOChr03") %>%
+  filter(pos > 180000000) %>%
+  ggplot(.,aes(x=pos,y=bayesfactor)) + geom_point(size=0.5) + 
+  facet_wrap(~variable,ncol=1,scales="free_y") +
+  geom_vline(xintercept=180982749,linetype="dotted",color="red") +
+  geom_vline(xintercept=180998636,linetype="dotted",color="red") +
+  ggtitle("Ha412HOChr03g0144431")
+
+ann.env.cum.long %>%
+  filter(chr == "Ha412HOChr03") %>%
+  filter(pos > 180800000) %>%
+  filter(pos < 181200000) %>%
+  ggplot(.,aes(x=pos,y=bayesfactor)) + geom_point(size=0.5) + 
+  facet_wrap(~variable,ncol=1,scales="free_y") +
+  geom_vline(xintercept=180982749,linetype="dotted",color="red") +
+  geom_vline(xintercept=180998636,linetype="dotted",color="red") +
+  ggtitle("Ha412HOChr03g0144431")
+dev.off()
+
+
+

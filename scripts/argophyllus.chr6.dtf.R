@@ -19,7 +19,7 @@ chosen_species_abbreviation <- "Arg"
 chosen_abbreviation <- "ARG"
 filtering <- "pcasites"
 prefix <- "Ha412HO_inv.jan09"
-base_directory <- "/media/owens/Copper/wild_gwas_2018/"
+base_directory <- "/media/owens/Copper/wild_gwas/"
 labels <- read_tsv("/home/owens/working/sample_info_apr_2018.tsv",col_names = T)
 inversions <- pca_genotypes %>% filter(species == chosen_species) %>%
   select(chr,mds) %>% filter(chr == "Ha412HOChr06") %>%unique()
@@ -44,57 +44,49 @@ for (n in 1:2){
   full_genotypes <- rbind(full_genotypes,fst_calls %>% select(chr,pos,sample,genotype,depth))
 }
 
-phenotypes <- read_tsv(paste("resources/ARG_DTF_corrected.txt",sep="")) %>%
-  rename(sample = FID) %>% select(sample, DTF_deduced,late_early)
+phenotypes <- read_tsv(paste("resources/ARG_all_phenotypes_May2019.txt",sep="")) %>%
+  rename(sample = FID) %>% select(sample, DTF_deduced) %>%
+  mutate(early_late = case_when(DTF_deduced < 80 ~ "Early",
+                                TRUE ~ "Late"))
 
 
 full_genotypes <- full_genotypes %>% inner_join(phenotypes)
 
-#Turn all 1 into 2 as a proxy for dominance?
-
-full_genotypes %>% 
-  group_by(pos) %>%
-  summarize(correlation = lm(DTF_deduced, genotype))
-
-##Way too messy, need to call state across the genotypes
-full_genotypes %>%
-  nest(-pos) %>% 
-  mutate(
-    fit = map(data, ~ lm(DTF_deduced ~ genotype, data = .x)),
-    tidied = map(fit, tidy)
-  ) %>% 
-  unnest(tidied) %>%
-  filter(term == "genotype") %>%
-  ggplot(.,aes(x=pos,y=estimate)) + geom_line()
 
 
-full_genotypes %>%
-  filter(sample == "ARG0015") %>%
-  ggplot(.,aes(x=pos,y=genotype)) + geom_point()
+
+
   
-pdf("Ha412HO_inv.jan09.inversions.argophyllus.late_early.pdf",height=20,width=10)
+#pdf("Ha412HO_inv.jan09.inversions.argophyllus.late_early.pdf",height=20,width=8)
+
+
 
 full_genotypes %>%
   select(pos) %>% unique() %>% pull() -> positions
-n_labels <- ceiling(length(positions)/40)
+
+n_labels <- ceiling(length(positions)/20)
 x_labels <- sort(positions)[seq(0, length(positions), by= n_labels)]
 full_genotypes %>%
+  group_by(sample) %>%
+  mutate(sum_geno =sum(genotype)) %>%
+  ungroup() %>%
   mutate(sample = as.factor(sample)) %>%
-  mutate(sample = fct_reorder(sample, late_early)) %>% 
+  mutate(sample = fct_reorder(sample, early_late)) %>% 
   #complete(sample,nesting(pos)) %>%
   group_by(sample) %>%
   arrange(sample, pos) %>%
  # mutate(mean5genotype = rollmean(x = genotype, 10, align = "right", fill = NA,na.rm=T)) %>%
-  ggplot(.,aes(x=as.factor(pos),y=sample)) + geom_tile(aes(fill=as.factor(genotype))) +
-    scale_fill_brewer(palette = "Set1",name="Genotype") +
-    facet_wrap(~late_early,nrow=2,scales="free_y") +
+  ggplot(.,aes(x=as.factor(pos),y=fct_reorder(sample, sum_geno))) + geom_tile(aes(fill=as.factor(genotype))) +
+    scale_fill_manual(name="Genotype",values=c("light grey","dark grey","black")) +
+    facet_wrap(~early_late,nrow=2,scales="free_y") +
   theme_bw() +
-  theme(axis.text.y=element_text(size=rel(0.3)),
+  theme(axis.text.y=element_blank(),
         axis.text.x=element_text(angle=60, hjust=1)) +
   scale_x_discrete(breaks=x_labels)  +
   xlab("Position") +
   ylab("Sample")
   
+ggsave("Ha412HO_inv.jan09.inversions.argophyllus.late_early.png",units="in",width=8,height=4,device="png")
   
 dev.off()
 
