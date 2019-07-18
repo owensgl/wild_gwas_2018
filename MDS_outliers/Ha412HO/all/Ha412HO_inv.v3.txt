@@ -1,45 +1,45 @@
-spe	species	dataset	chr	mds	direction	threshold	n_blocks
-annuus	Annuus	env	1	1	neg	-0.4	1
-annuus	Annuus	env	5	1	pos	0	1
-annuus	Annuus	env	11	1	pos	0	1
-annuus	Annuus	env	13	1	pos	0.05	1
-annuus	Annuus	env	13	2	pos	0.3	1
-annuus	Annuus	env	14	1	neg	-0.375	1
-annuus	Annuus	env	14	4	neg	-0.3	1
-annuus	Annuus	env	15	1	pos	0.2	1
-annuus	Annuus	env	16	1	neg	-0.2	1
-annuus	Annuus	env	16	2	pos	0.18	1
-annuus	Annuus	env	17	2	neg	-0.2	1
-argophyllus	Argophyllus	gwas	3	1	pos	0.375	1
-argophyllus	Argophyllus	gwas	3	2	pos	0.3	1
-argophyllus	Argophyllus	gwas	6	1	pos	0.5	1
-argophyllus	Argophyllus	gwas	6	4	pos	0.2	1
-argophyllus	Argophyllus	gwas	10	1	neg	-0.2	1
-argophyllus	Argophyllus	gwas	16	3	pos	0.3	1
-petiolaris	Petiolaris	gwas	1	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	5	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	6	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	6	2	syn	NA	NA
-petiolaris	Petiolaris	gwas	6	3	syn	NA	NA
-petiolaris	Petiolaris	gwas	7	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	8	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	9	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	10	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	11	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	12	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	13	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	14	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	14	2	syn	NA	NA
-petiolaris	Petiolaris	gwas	16	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	16	2	syn	NA	NA
-petiolaris	Petiolaris	gwas	17	1	syn	NA	NA
-petiolaris	Petiolaris	gwas	17	2	syn	NA	NA
-petiolaris	Petiolaris	gwas	17	3	syn	NA	NA
-petiolaris	Petiolaris	gwas	17	4	syn	NA	NA
-niveus	Niveus	gwas	5	1	neg	-0.4	1
-niveus	Niveus	gwas	6	3	neg	-0.2	1
-niveus	Niveus	gwas	7	3	neg	-0.3	1
-niveus	Niveus	gwas	8	1	pos	0.2	1
-niveus	Niveus	gwas	10	4	neg	-0.4	1
-niveus	Niveus	gwas	15	1	neg	-0.1	3
-niveus	Niveus	gwas	17	1	neg	-0.2	2
+spe	species	dataset	chr	mds	direction	threshold	n_blocks	sv_name
+annuus	Annuus	env	1	1	neg	-0.4	1	ann01.01
+annuus	Annuus	env	5	1	pos	0	1	ann05.01
+annuus	Annuus	env	11	1	pos	0	1	ann11.01
+annuus	Annuus	env	13	1	pos	0.05	1	ann13.01
+annuus	Annuus	env	13	2	pos	0.3	1	ann13.02
+annuus	Annuus	env	14	1	neg	-0.375	1	ann14.01
+annuus	Annuus	env	14	4	neg	-0.3	1	ann14.02
+annuus	Annuus	env	15	1	pos	0.2	1	ann15.01
+annuus	Annuus	env	16	1	neg	-0.2	1	ann16.01
+annuus	Annuus	env	16	2	pos	0.18	1	ann16.02
+annuus	Annuus	env	17	2	neg	-0.2	1	ann17.01
+argophyllus	Argophyllus	gwas	3	1	pos	0.375	1	arg03.01
+argophyllus	Argophyllus	gwas	3	2	pos	0.3	1	arg03.02
+argophyllus	Argophyllus	gwas	6	1	pos	0.5	1	arg06.01
+argophyllus	Argophyllus	gwas	6	4	pos	0.2	1	arg06.02
+argophyllus	Argophyllus	gwas	10	1	neg	-0.2	1	arg10.01
+argophyllus	Argophyllus	gwas	16	3	pos	0.3	1	arg16.01
+petiolaris	Petiolaris	gwas	1	1	syn	NA	NA	pet01.01
+petiolaris	Petiolaris	gwas	5	1	syn	NA	NA	pet05.01
+petiolaris	Petiolaris	gwas	6	1	syn	NA	NA	pet06.01
+petiolaris	Petiolaris	gwas	6	2	syn	NA	NA	pet06.02
+petiolaris	Petiolaris	gwas	6	3	syn	NA	NA	pet06.03
+petiolaris	Petiolaris	gwas	7	1	syn	NA	NA	pet07.01
+petiolaris	Petiolaris	gwas	8	1	syn	NA	NA	pet08.01
+petiolaris	Petiolaris	gwas	9	1	syn	NA	NA	pet09.01
+petiolaris	Petiolaris	gwas	10	1	syn	NA	NA	pet10.01
+petiolaris	Petiolaris	gwas	11	1	syn	NA	NA	pet11.01
+petiolaris	Petiolaris	gwas	12	1	syn	NA	NA	pet12.01
+petiolaris	Petiolaris	gwas	13	1	syn	NA	NA	pet13.01
+petiolaris	Petiolaris	gwas	14	1	syn	NA	NA	pet14.01
+petiolaris	Petiolaris	gwas	14	2	syn	NA	NA	pet14.02
+petiolaris	Petiolaris	gwas	16	1	syn	NA	NA	pet16.01
+petiolaris	Petiolaris	gwas	16	2	syn	NA	NA	pet16.02
+petiolaris	Petiolaris	gwas	17	1	syn	NA	NA	pet17.01
+petiolaris	Petiolaris	gwas	17	2	syn	NA	NA	pet17.02
+petiolaris	Petiolaris	gwas	17	3	syn	NA	NA	pet17.03
+petiolaris	Petiolaris	gwas	17	4	syn	NA	NA	pet17.04
+niveus	Niveus	gwas	5	1	neg	-0.4	1	niv05.01
+niveus	Niveus	gwas	6	3	neg	-0.2	1	niv06.01
+niveus	Niveus	gwas	7	3	neg	-0.3	1	niv07.01
+niveus	Niveus	gwas	8	1	pos	0.2	1	niv08.01
+niveus	Niveus	gwas	10	4	neg	-0.4	1	niv10.01
+niveus	Niveus	gwas	15	1	neg	-0.1	3	niv15.01
+niveus	Niveus	gwas	17	1	neg	-0.2	2	niv17.01
