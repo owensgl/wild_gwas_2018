@@ -85,9 +85,11 @@ while(<IN>){
       next;
     }
     foreach my $i (9..$#a){
+      if (($a[$i] eq './.') or ($a[$i] eq '.')){next;}
       my @fields = split(/:/,$a[$i]);
       my $genotype = $fields[0];
       my $dp = $fields[$dp_n];
+      unless($dp){next;}
       if ($dp == 0){next;}
       if (($genotype eq '.') or ($genotype eq './.')){next;}
       if (($genotype eq "$allele_1\/$allele_2") or  ($genotype eq "$allele_2\/$allele_1")){
