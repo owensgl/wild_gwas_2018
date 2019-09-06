@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use POSIX;
 my $IUPAC = "TRUE";
-my $subsample = 1; #Percent of sites to subsample down.
+my $subsample = 1; #Proportion of sites to subsample down.
 my $raxml_filter = "TRUE"; #This filters sites where the alternate allele is only represented by heterozysgotes, making the site effectively invariant.
 #This script will turn a vcf into a fasta.
 #Set this to FALSE if you want to keep invariant sites.
