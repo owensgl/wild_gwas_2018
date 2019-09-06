@@ -9,7 +9,6 @@ my $gzvcf = $ARGV[1];
 my $Ha412_remap = "TRUE"; #Set to TRUE to output the remapped positions
 
 open (MDS, "gunzip -c $mds_fst_file |");
-
 my %allele_1;
 my %allele_2;
 my %ha412_chr;
