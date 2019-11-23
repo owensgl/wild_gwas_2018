@@ -10,6 +10,7 @@ my $vcffile = $ARGV[1]; #The VCF to be processed
 #First run through the VCF to load all sites that need processing
 
 my %used_sites;
+my $linecounter = 1;
 open(VCF, "gunzip -c $vcffile |");
 while(<VCF>){
   chomp;
@@ -23,12 +24,13 @@ while(<VCF>){
   $XRQ_info =~ s/XRQ=//g;
   my $location = $XRQ_info;
   $used_sites{"$location"}++;
+  if ($linecounter % 1000000 == 0){print STDERR "Initial vcf processing $location...\n";}
 }
 close VCF;
-
+print STDERR "Loaded all sites\n";
 my %ancestral_state;
 open(OUTGROUP, "gunzip -c $outfile |");
-my $linecounter = 1;
+$linecounter = 1;
 while(<OUTGROUP>){
   chomp;
   if ($. == 1){
@@ -46,7 +48,7 @@ while(<OUTGROUP>){
   $ancestral_state{"$chr.$pos"} = $ref;
 }
 close OUTGROUP;
-
+print STDERR "Finished processing outgroup file\n";
 open(VCF2, "gunzip -c $vcffile |");
 my %sample;
 while(<VCF2>){

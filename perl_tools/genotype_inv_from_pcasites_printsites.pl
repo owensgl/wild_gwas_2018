@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-#This script takes an fst file, it picks out the sites that are above an Fst threshold and records what alleles are for each group. It then uses a vcf file to record how many of each type of allele each sample has. 
+#This script takes the list of MDS PCA outliers and  records what alleles are for each group. It then uses a vcf file to record how many of each type of allele each sample has. 
 my $mds_fst_file = $ARGV[0]; #List of fst outliers
 my $gzvcf = $ARGV[1];
 #my $min_freq = 0.95;

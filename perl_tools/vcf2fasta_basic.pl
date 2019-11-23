@@ -8,7 +8,7 @@ my $subsample = 1; #Proportion of sites to subsample down.
 my $raxml_filter = "TRUE"; #This filters sites where the alternate allele is only represented by heterozysgotes, making the site effectively invariant.
 #This script will turn a vcf into a fasta.
 #Set this to FALSE if you want to keep invariant sites.
-my $remove_missing_data = "FALSE";
+my $remove_missing_data = "FALSE"; #If set to TRUE, this removes all sites with any missing data.
 my $outprefix = $ARGV[0];
 my(%table) = (
         'AC' => 'M',
@@ -55,7 +55,7 @@ while(<STDIN>){
     my $chr = $a[0];
     my $pos = $a[1];
     my $ref = $a[3];
-#    if (length($ref) > 1){next;}
+    if (length($ref) > 1){next;}
     my $alt = $a[4];
     my @alts = split(/,/,$alt);
     foreach my $alt (@alts){
