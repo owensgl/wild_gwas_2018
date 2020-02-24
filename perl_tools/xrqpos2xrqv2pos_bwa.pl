@@ -181,6 +181,7 @@ close FASTA;
 print STDERR "Aligning SNP positions using BWA...\n";
 #Align to HA412 and pull out SNP position from mapping.
 nofail("$bwa mem -t $ncores_bwa $xrqv2_ref $tmp_prefix.fastq > $tmp_prefix.sam");
+
 open SAM, "$tmp_prefix.sam";
 $counter=0;
 print STDERR "Pulling SNP positions from SAM file...\n";

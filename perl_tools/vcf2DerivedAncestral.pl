@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 
-#This script takes a VCF, a list of outgroup samples, and outputs only sites where the outgroups are fixed for a single allele. It then polarizes all SNPs as A (ancestral) or B (derived). Requires biallelic sites only.
-my $min_out_sampled = 0.45;
+#This script takes a VCF, a list of outgroup samples, and outputs only sites where the outgroups are fixed for a single allele. It then polarizes all SNPs as A (ancestral) or the allele number for derived.
+my $min_out_sampled = 0.15;
 
 my $popfile = $ARGV[0]; #List of outgroup samples
 my %outgroups;
@@ -34,7 +34,9 @@ while(<STDIN>){
   if ($_ =~ m/^#/){next;}
   my $alts = $a[4];
   my @alts = split(/,/,$alts);
-  if ($alts[1]){next;} #Skips sites with more than two alleles
+  if ($alts[10]){ #Skip if more than 10 alleles, which would mean double digit alleles
+    next;
+  }
   my %outgroup_alleles;
   my $outgroup_present= 0;
   my $outgroup_absent = 0;
@@ -48,6 +50,10 @@ while(<STDIN>){
         next;
       }
       my @genos = split(/\//,$infos[0]);
+      if ($genos[0] eq '.'){
+	$outgroup_absent++;
+	next;
+      }
       foreach my $a (0..1){
         $outgroup_alleles{$genos[$a]}++;
       }
@@ -66,20 +72,22 @@ while(<STDIN>){
   foreach my $i (9..$#a){
     if ($outgroups{$sample{$i}}){next;} #Don't analyze outgroup samples.
     if (($a[$i] eq '.') or ($a[$i] eq '.:0,0')){
-      print "\tN";
+      print "\tNN";
     }else{
       my @infos = split(/:/,$a[$i]);
       if ($infos[0] eq './.'){
-        print "\tN";
+        print "\tNN";
         next;
       }
       my @genos = split(/\//,$infos[0]);
-      if (($genos[0] == $outgroup_allele ) and ($genos[1] == $outgroup_allele )){
-        print "\tA";
-      }elsif (($genos[0] != $outgroup_allele ) and ($genos[1] != $outgroup_allele)){
-        print "\tB";
-      }else{
-        print "\tH";
+      if ($genos[0] eq '.'){print "\tNN";next;}
+      print "\t";
+      foreach my $j (0..1){
+	if ($genos[$j] eq $outgroup_allele){
+          print "A";
+	}else{
+	  print "$genos[$j]";
+	}
       }
     }
   }
