@@ -33,7 +33,7 @@ while(<STDIN>){
   }
   my $info = $a[9];
   my @infos = split(/:/,$info);
-  my $depth = $infos[3];
+  my $depth = $infos[2];
   my $call = $infos[0];
   my @calls;
   if ($call =~ /\//){
